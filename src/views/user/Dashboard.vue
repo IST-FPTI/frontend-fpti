@@ -1,5 +1,5 @@
 <script setup>
-import Sidebar from "../../components/admin/Sidebar.vue";
+import Sidebar from "../../components/user/Sidebar.vue";
 import Navbar from "../../components/general/Navbar.vue";
 import Footer from "../../components/general/Footer.vue";
 import Slider from "../../components/general/Carousel.vue";
@@ -139,18 +139,19 @@ export default {
             },
           }
         );
-        (this.hutangBelumDibayar = response.data.hutangBelumDibayar),
-          (this.hutangSudahDibayar = response.data.hutangSudahDibayar),
-          (this.saldoSaatIni = response.data.saldoSaatIni),
-          (this.totalPenerimaan = response.data.totalPenerimaan),
-          (this.totalPengiriman = response.data.totalPengiriman),
-          (this.ready = true);
+        this.hutangBelumDibayar= response.data.hutangBelumDibayar,
+        this.hutangSudahDibayar= response.data.hutangSudahDibayar,
+        this.saldoSaatIni= response.data.saldoSaatIni,
+        this.totalPenerimaan= response.data.totalPenerimaan,
+        this.totalPengiriman= response.data.totalPengiriman,
+      
+        this.ready = true;
       } catch (error) {
         console.error(error);
       }
     },
   },
-  computed: {
+      computed: {
     // Metode komputasi untuk mengonversi jumlah menjadi format mata uang Rupiah
     formatCurrency: function () {
       return function (value) {
@@ -192,7 +193,7 @@ export default {
         const level = tokenPayload.level; // Ambil level pengguna dari payload
         this.user_id = tokenPayload.id;
         console.log("ini idddd:", this.user_id);
-        if (level !== "1") {
+        if (level !== "0") {
           this.$router.push("/unauthorized");
         } else if (!header || !signature) {
           this.$router.push("/");

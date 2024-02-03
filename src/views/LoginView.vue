@@ -140,7 +140,7 @@ export default {
           if (response.data.level === "1") {
             this.$router.push("/admin-dashboard");
           } else if (response.data.level === "0") {
-            this.$router.push("/voter-dashboard");
+            this.$router.push("/user-dashboard");
           } else {
             this.$router.push("/unauthorized");
           }

@@ -14,42 +14,64 @@ const router = createRouter({
       component: () => import('../views/admin/Dashboard.vue')
     },
     {
-      path: '/admin-candidate-list',
-      name: 'admin-candidate-list',
-      component: () => import('../views/admin/CandidateList.vue')
+      path: '/admin-pemasukan',
+      name: 'admin-pemasukan',
+      component: () => import('../views/admin/Pemasukan.vue')
     },
     {
-      path: '/admin-voter-list',
-      name: 'admin-voter-list',
-      component: () => import('../views/admin/VoterList.vue')
+      path: '/admin-pemasukan-external',
+      name: 'admin-pemasukan-external',
+      component: () => import('../views/admin/PemasukanEksternal.vue')
     },
     {
-      path: '/admin-time-vote',
-      name: 'admin-time-vote',
-      component: () => import('../views/admin/TimeVote.vue')
+      path: '/admin-pengeluaran',
+      name: 'admin-pengeluaran',
+      component: () => import('../views/admin/Pengeluaran.vue')
     },
     {
-      path: '/admin-aspirasi',
-      name: 'admin-aspirasi',
-      component: () => import('../views/admin/Aspirasi.vue')
+      path: '/admin-hutang',
+      name: 'admin-hutang',
+      component: () => import('../views/admin/Hutang.vue')
     },
+    {
+      path: '/admin-piutang',
+      name: 'admin-piutang',
+      component: () => import('../views/admin/Piutang.vue')
+    },
+    {
+      path: '/admin-jurnal',
+      name: 'admin-jurnal',
+      component: () => import('../views/admin/Jurnal.vue')
+    },
+    {
+      path: '/admin-ledger',
+      name: 'admin-ledger',
+      component: () => import('../views/admin/BukuBesar.vue')
+    },
+    {
+      path: '/admin-realisasi-anggaran',
+      name: 'admin-realisasi-anggaran',
+      component: () => import('../views/admin/RealisasiAnggaran.vue')
+    },
+
     
-    // voter
+    // user
     {
-      path: '/voter-dashboard',
-      name: 'voter-dashboard',
-      component: () => import('../views/voter/Dashboard.vue')
+      path: '/user-dashboard',
+      name: 'user-dashboard',
+      component: () => import('../views/user/Dashboard.vue')
     },
     {
-      path: '/voter-vote',
-      name: 'voter-vote',
-      component: () => import('../views/voter/Candidate.vue')
+      path: '/user-jurnal',
+      name: 'user-jurnal',
+      component: () => import('../views/user/Jurnal.vue')
     },
     {
-      path: '/voter-aspirasi',
-      name: 'voter-aspirasi',
-      component: () => import('../views/voter/Aspirasi.vue')
+      path: '/user-ledger',
+      name: 'user-ledger',
+      component: () => import('../views/user/BukuBesar.vue')
     },
+
   ]
 })
 
