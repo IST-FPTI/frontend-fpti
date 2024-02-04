@@ -366,7 +366,7 @@ export default {
       formData.append("id_user", this.user_id);
 
       axios
-        .post("http://localhost:8000/api/create-hutangpiutang", formData, {
+        .post("https://backend.keuanganfpti.com/api/create-hutangpiutang", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -401,7 +401,7 @@ export default {
       formData.append("id_user", this.user_id);
 
       axios
-        .post(`http://localhost:8000/api/update-hutangpiutang/${this.hutang_id}`, formData, {
+        .post(`https://backend.keuanganfpti.com/api/update-hutangpiutang/${this.hutang_id}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -430,7 +430,7 @@ export default {
       this.ready = false;
 
       axios
-        .delete(`http://localhost:8000/api/delete-hutangpiutang/${id}`, {
+        .delete(`https://backend.keuanganfpti.com/api/delete-hutangpiutang/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -455,7 +455,7 @@ export default {
     async fetchDataHutang() {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/list-hutangpiutang`,
+          `https://backend.keuanganfpti.com/api/list-hutangpiutang`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -472,7 +472,7 @@ export default {
     async bayarHutang(id) {
       try {
         const response = await axios.post(
-          `http://localhost:8000/api/bayar-hutangpiutang/${id}`,
+          `https://backend.keuanganfpti.com/api/bayar-hutangpiutang/${id}`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),

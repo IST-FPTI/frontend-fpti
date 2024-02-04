@@ -132,7 +132,7 @@ export default {
     async fetchDataReport() {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/report-keuangan/1`,
+          `https://backend.keuanganfpti.com/api/report-keuangan/1`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),

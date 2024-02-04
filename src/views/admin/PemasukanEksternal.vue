@@ -319,7 +319,7 @@ export default {
       formData.append("id_penerima", this.user_id);
 
       axios
-        .post("http://localhost:8000/api/external-transaksi", formData, {
+        .post("https://backend.keuanganfpti.com/api/external-transaksi", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -359,7 +359,7 @@ export default {
 
       axios
         .post(
-          `http://localhost:8000/api/update-external/${this.formUpdatePemasukan.id}`,
+          `https://backend.keuanganfpti.com/api/update-external/${this.formUpdatePemasukan.id}`,
           formData,
           {
             headers: {
@@ -394,7 +394,7 @@ export default {
     deletePemasukan(id) {
       this.ready = false;
       axios
-        .delete(`http://localhost:8000/api/delete-external/${id}`, {
+        .delete(`https://backend.keuanganfpti.com/api/delete-external/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -423,7 +423,7 @@ export default {
     async fetchDataPemasukan() {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/list-external/2`,
+          `https://backend.keuanganfpti.com/api/list-external/2`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),

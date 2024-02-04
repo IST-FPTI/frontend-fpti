@@ -67,7 +67,7 @@ const toggleSidebar = () => {
                           <div class="col-6">
                             <a
                               :href="
-                                'http://localhost:8000/storage/realisasi_anggaran/' +
+                                'https://backend.keuanganfpti.com/storage/realisasi_anggaran/' +
                                 item.file_pdf
                               "
                               target="_blank"
@@ -204,7 +204,7 @@ export default {
       formData.append("id_pemasukan", this.selectedAnggaran);
 
       axios
-        .post("http://localhost:8000/api/create-realisasi-anggaran", formData, {
+        .post("https://backend.keuanganfpti.com/api/create-realisasi-anggaran", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -237,7 +237,7 @@ export default {
     deleteRealisasi(id) {
       this.ready = false;
       axios
-        .delete(`http://localhost:8000/api/delete-realisasi-anggaran/${id}`, {
+        .delete(`https://backend.keuanganfpti.com/api/delete-realisasi-anggaran/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -265,7 +265,7 @@ export default {
     async fetchDataRealisasiAnggaran() {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/realisasi-anggaran`,
+          `https://backend.keuanganfpti.com/api/realisasi-anggaran`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -282,7 +282,7 @@ export default {
     async fetchDataAnggaran() {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/my-anggaran/${this.user_id}`,
+          `https://backend.keuanganfpti.com/api/my-anggaran/${this.user_id}`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),

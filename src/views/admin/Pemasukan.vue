@@ -116,7 +116,7 @@ export default {
       formData.append("id_penerima", 1);
 
       axios
-        .post("http://localhost:8000/api/external-transaksi", formData, {
+        .post("https://backend.keuanganfpti.com/api/external-transaksi", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -147,7 +147,7 @@ export default {
     async fetchDataPemasukan() {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/list-pemasukan/2`,
+          `https://backend.keuanganfpti.com/api/list-pemasukan/2`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),

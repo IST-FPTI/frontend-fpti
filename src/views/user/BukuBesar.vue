@@ -193,7 +193,7 @@ export default {
     async fetchDataBukuBesar() {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/buku-besar`,
+          `https://backend.keuanganfpti.com/api/buku-besar`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),

@@ -331,7 +331,7 @@ export default {
       formData.append("id_penerima", this.selectedPenerima);
 
       axios
-        .post("http://localhost:8000/api/create-transaksi", formData, {
+        .post("https://backend.keuanganfpti.com/api/create-transaksi", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -373,7 +373,7 @@ export default {
 
       axios
         .post(
-          `http://localhost:8000/api/update-transaksi/${this.formUpdateTransaksi.id}`,
+          `https://backend.keuanganfpti.com/api/update-transaksi/${this.formUpdateTransaksi.id}`,
           formData,
           {
             headers: {
@@ -406,7 +406,7 @@ export default {
       this.ready = false;
 
       axios
-        .delete(`http://localhost:8000/api/delete-transaksi/${id}`, {
+        .delete(`https://backend.keuanganfpti.com/api/delete-transaksi/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -435,7 +435,7 @@ export default {
     async fetchDataPengeluaran() {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/list-pengeluaran/${this.user_id}`,
+          `https://backend.keuanganfpti.com/api/list-pengeluaran/${this.user_id}`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -453,7 +453,7 @@ export default {
     async fetchDataPenerima() {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/list-penerima`,
+          `https://backend.keuanganfpti.com/api/list-penerima`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
