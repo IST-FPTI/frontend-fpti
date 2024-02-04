@@ -53,6 +53,11 @@ const router = createRouter({
       name: 'admin-realisasi-anggaran',
       component: () => import('../views/admin/RealisasiAnggaran.vue')
     },
+    {
+      path: '/admin-pengguna',
+      name: 'admin-pengguna',
+      component: () => import('../views/admin/User.vue')
+    },
 
     
     // user
