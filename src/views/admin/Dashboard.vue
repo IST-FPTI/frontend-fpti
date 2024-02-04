@@ -126,13 +126,14 @@ export default {
       totalPenerimaan: 0,
       totalPengiriman: 0,
       ready: false,
+      user_id:""
     };
   },
   methods: {
     async fetchDataReport() {
       try {
         const response = await axios.get(
-          `https://backend.keuanganfpti.com/api/report-keuangan/1`,
+          `https://backend.keuanganfpti.com/api/report-keuangan/${this.user_id}`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
