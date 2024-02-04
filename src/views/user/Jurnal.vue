@@ -96,7 +96,7 @@ export default {
       formData.append("nama_mapel", this.formMapel.nama_mapel);
 
       axios
-        .post("http://localhost:8000/api/create-mapel", formData, {
+        .post("https://backend.keuanganfpti.com/api/create-mapel", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -128,7 +128,7 @@ export default {
 
       axios
         .post(
-          `http://localhost:8000/api/update-mapel/${this.mapel_id}`,
+          `https://backend.keuanganfpti.com/api/update-mapel/${this.mapel_id}`,
           formData,
           {
             headers: {
@@ -164,7 +164,7 @@ export default {
       this.ready = false;
 
       axios
-        .delete(`http://localhost:8000/api/delete-mapel/${id}`, {
+        .delete(`https://backend.keuanganfpti.com/api/delete-mapel/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -193,7 +193,7 @@ export default {
     async fetchDataJurnal() {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/data-jurnal`,
+          `https://backend.keuanganfpti.com/api/data-jurnal`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
