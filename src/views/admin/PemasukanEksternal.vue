@@ -47,20 +47,53 @@ const toggleSidebar = () => {
                   <thead>
                     <tr>
                       <th scope="col" style="width: 50px">No</th>
-                      <th scope="col">Nominal</th>
-                      <th scope="col">Keterangan</th>
+                      <th scope="col">Aksi</th>
+                      <th scope="col">Pemberi Dana</th>
+                      <th scope="col">Jumlah Dana</th>
                       <th scope="col">Tanggal Masuk</th>
-                      <th scope="col">Pengirim</th>
+                      <th scope="col">Keterangan</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-for="(item, index) in pemasukan" :key="item.id">
                       <td>{{ index + 1 }}</td>
-
+                      <td>
+                        <div class="row">
+                          <div class="col-6">
+                            <button
+                              type="button"
+                              class="btn btn-warning"
+                              data-toggle="modal"
+                              data-target="#editPemasukan"
+                              @click="
+                                setDataUpdate(
+                                  item.pemberi_dana,
+                                  item.jumlah_transaksi,
+                                  item.tgl_transaksi,
+                                  item.deskripsi,
+                                  item.id
+                                )
+                              "
+                            >
+                              <i class="bi bi-pencil-square"></i>
+                            </button>
+                          </div>
+                          <div class="col-6">
+                            <button
+                              @click="
+                                konfirmasiDelete(item.id, item.pemberi_dana)
+                              "
+                              class="btn btn-danger customDetail"
+                            >
+                              <i class="bi bi-trash3"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </td>
+                      <td>{{ item.pemberi_dana }}</td>
                       <td>{{ formatCurrency(item.jumlah_transaksi) }}</td>
-                      <td>{{ item.deskripsi }}</td>
                       <td>{{ item.tgl_transaksi }}</td>
-                      <td>{{ item.nama_pengirim }}</td>
+                      <td>{{ item.deskripsi }}</td>
                     </tr>
                   </tbody>
                 </DataTable>
@@ -163,7 +196,7 @@ const toggleSidebar = () => {
   <!-- modal edit kelas -->
   <div
     class="modal fade"
-    id="editMapel"
+    id="editPemasukan"
     tabindex="-1"
     role="dialog"
     aria-labelledby="editMapelLabel"
@@ -172,7 +205,7 @@ const toggleSidebar = () => {
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="editMapelLabel">Edit Pemasukan</h5>
+          <h5 class="modal-title" id="editMapelLabel">Edit Pemasukan External</h5>
           <button
             type="button"
             class="close"
@@ -185,14 +218,43 @@ const toggleSidebar = () => {
         <div class="modal-body">
           <form>
             <div class="mb-3">
-              <label for="ketua" class="form-label">Pemasukan</label>
+              <label for="ketua" class="form-label">Pemberi Dana</label>
               <input
                 type="text"
                 class="form-control"
                 id="mapel"
-                placeholder="masukkan nama mapel"
-                v-model="formUpdateMapel.nama_mapel"
+                placeholder="masukkan sumber dana"
+                v-model="formUpdatePemasukan.pemberi_dana"
               />
+            </div>
+            <div class="mb-3">
+              <label for="ketua" class="form-label">Jumlah Pengeluaran</label>
+              <input
+                type="number"
+                class="form-control"
+                id="mapel"
+                placeholder="masukkan nominal pengeluaran"
+                v-model="formUpdatePemasukan.jumlah_transaksi"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="ketua" class="form-label">Tanggal Transaksi</label>
+              <input
+                type="date"
+                class="form-control"
+                id="mapel"
+                v-model="formUpdatePemasukan.tgl_transaksi"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="keterangan" class="form-label">Keterangan</label>
+              <textarea
+                class="form-control"
+                id="keterangan"
+                placeholder="Masukkan keterangan"
+                v-model="formUpdatePemasukan.deskripsi"
+              ></textarea>
             </div>
           </form>
         </div>
@@ -200,7 +262,7 @@ const toggleSidebar = () => {
           <button type="button" class="btn btn-secondary" data-dismiss="modal">
             Batal
           </button>
-          <button type="button" class="btn blueButton" @click="updateMapel">
+          <button type="button" class="btn blueButton" @click="updatePemasukan">
             Simpan
           </button>
         </div>
@@ -228,14 +290,25 @@ export default {
         tgl_transaksi: "",
         id_penerima: "",
       },
-      formUpdateMapel: {
-        nama_mapel: "",
+      formUpdatePemasukan: {
+        pemberi_dana: "",
+        jumlah_transaksi: "",
+        deskripsi: "",
+        tgl_transaksi: "",
+        id:""
       },
       ready: false,
-      mapel_id: "",
+      user_id: "",
     };
   },
   methods: {
+    setDataUpdate(pemberi_dana, jumlah_transaksi, tgl_transaksi, deskripsi, id) {
+      this.formUpdatePemasukan.pemberi_dana = pemberi_dana;
+      this.formUpdatePemasukan.jumlah_transaksi = jumlah_transaksi;
+      this.formUpdatePemasukan.tgl_transaksi = tgl_transaksi;
+      this.formUpdatePemasukan.deskripsi = deskripsi;
+      this.formUpdatePemasukan.id = id;
+    },
     createPemasukan() {
       this.ready = false;
       const formData = new FormData();
@@ -243,7 +316,7 @@ export default {
       formData.append("jumlah_transaksi", this.formPemasukan.jumlah_transaksi);
       formData.append("deskripsi", this.formPemasukan.deskripsi);
       formData.append("tgl_transaksi", this.formPemasukan.tgl_transaksi);
-      formData.append("id_penerima", 1);
+      formData.append("id_penerima", this.user_id);
 
       axios
         .post("http://localhost:8000/api/external-transaksi", formData, {
@@ -275,14 +348,18 @@ export default {
         });
     },
 
-    updateMapel() {
+    updatePemasukan() {
       this.ready = false;
       const formData = new FormData();
-      formData.append("nama_mapel", this.formUpdateMapel.nama_mapel);
+      formData.append("pemberi_dana", this.formUpdatePemasukan.pemberi_dana);
+      formData.append("jumlah_transaksi", this.formUpdatePemasukan.jumlah_transaksi);
+      formData.append("tgl_transaksi", this.formUpdatePemasukan.tgl_transaksi);
+      formData.append("deskripsi", this.formUpdatePemasukan.deskripsi);
+      formData.append("id_penerima", this.user_id);
 
       axios
         .post(
-          `http://localhost:8000/api/update-mapel/${this.mapel_id}`,
+          `http://localhost:8000/api/update-external/${this.formUpdatePemasukan.id}`,
           formData,
           {
             headers: {
@@ -314,11 +391,10 @@ export default {
         });
     },
 
-    deleteMapel(id) {
+    deletePemasukan(id) {
       this.ready = false;
-
       axios
-        .delete(`http://localhost:8000/api/delete-mapel/${id}`, {
+        .delete(`http://localhost:8000/api/delete-external/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -347,7 +423,7 @@ export default {
     async fetchDataPemasukan() {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/list-pemasukan/2`,
+          `http://localhost:8000/api/list-external/2`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -369,13 +445,13 @@ export default {
         icon: icon,
       }).then(() => {
         $("#addPemasukan").modal("hide");
-        $("#editMapel").modal("hide");
+        $("#editPemasukan").modal("hide");
       });
     },
 
-    konfirmasi(id, nama_mapel) {
+    konfirmasiDelete(id, pemberi_hutang) {
       Swal.fire({
-        title: `Apakah Anda yakin ingin menghapus Pemasukan ${nama_mapel}?`,
+        title: `Apakah Anda yakin ingin menghapus Pemasukan ${pemberi_hutang}?`,
         text: "Anda akan keluar dari akun ini.",
         icon: "warning",
         showCancelButton: true,
@@ -385,14 +461,9 @@ export default {
         cancelButtonText: "Batal",
       }).then((result) => {
         if (result.isConfirmed) {
-          this.deleteMapel(id);
+          this.deletePemasukan(id);
         }
       });
-    },
-
-    setMapelId(id, nama_mapel) {
-      this.mapel_id = id;
-      this.formUpdateMapel.nama_mapel = nama_mapel;
     },
   },
   computed: {

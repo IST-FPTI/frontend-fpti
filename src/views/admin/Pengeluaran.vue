@@ -72,7 +72,8 @@ const toggleSidebar = () => {
                                   item.jumlah_transaksi,
                                   item.deskripsi,
                                   item.tgl_transaksi,
-                                  item.id_penerima
+                                  item.id_penerima,
+                                  item.id
                                 )
                               "
                             >
@@ -81,7 +82,7 @@ const toggleSidebar = () => {
                           </div>
                           <div class="col-6">
                             <button
-                              @click="konfirmasi(item.id, item.nama_mapel)"
+                              @click="konfirmasi(item.id, item.nama_penerima)"
                               class="btn btn-danger customDetail"
                             >
                               <i class="bi bi-trash3"></i>
@@ -269,7 +270,7 @@ const toggleSidebar = () => {
           <button type="button" class="btn btn-secondary" data-dismiss="modal">
             Batal
           </button>
-          <button type="button" class="btn blueButton" @click="updateMapel">
+          <button type="button" class="btn blueButton" @click="updatePengeluaran">
             Simpan
           </button>
         </div>
@@ -302,17 +303,19 @@ export default {
         deskripsi: "",
         tgl_transaksi: "",
         id_penerima: "",
+        id:""
       },
       ready: false,
-      transaksi_id: "",
       selectedPenerima: "",
+      user_id:""
     };
   },
   methods: {
-    setDataUpdate(jumlah, deskripsi, tgl, penerima) {
+    setDataUpdate(jumlah, deskripsi, tgl, penerima, id) {
       this.formUpdateTransaksi.jumlah_transaksi = jumlah;
       this.formUpdateTransaksi.deskripsi = deskripsi;
       this.formUpdateTransaksi.tgl_transaksi = tgl;
+      this.formUpdateTransaksi.id = id;
       this.selectedPenerima = penerima;
     },
     createMapel() {
@@ -324,7 +327,7 @@ export default {
       );
       formData.append("deskripsi", this.formPengeluaran.deskripsi);
       formData.append("tgl_transaksi", this.formPengeluaran.tgl_transaksi);
-      formData.append("id_pengirim", 1);
+      formData.append("id_pengirim", this.user_id);
       formData.append("id_penerima", this.selectedPenerima);
 
       axios
@@ -356,14 +359,21 @@ export default {
         });
     },
 
-    updateMapel() {
+    updatePengeluaran() {
       this.ready = false;
       const formData = new FormData();
-      formData.append("nama_mapel", this.formUpdateTransaksi.nama_mapel);
+      formData.append(
+        "jumlah_transaksi",
+        this.formUpdateTransaksi.jumlah_transaksi
+      );
+      formData.append("deskripsi", this.formUpdateTransaksi.deskripsi);
+      formData.append("tgl_transaksi", this.formUpdateTransaksi.tgl_transaksi);
+      formData.append("id_pengirim", this.user_id);
+      formData.append("id_penerima", this.selectedPenerima);
 
       axios
         .post(
-          `http://localhost:8000/api/update-mapel/${this.mapel_id}`,
+          `http://localhost:8000/api/update-transaksi/${this.formUpdateTransaksi.id}`,
           formData,
           {
             headers: {
@@ -374,9 +384,6 @@ export default {
         )
         .then((response) => {
           console.log(response.data);
-          this.formPengeluaran = {
-            nama_mapel: "",
-          };
           this.showAlert(
             "Request Success",
             "Pengeluaran berhasil diupdate",
@@ -395,11 +402,11 @@ export default {
         });
     },
 
-    deleteMapel(id) {
+    deletePengeluaran(id) {
       this.ready = false;
 
       axios
-        .delete(`http://localhost:8000/api/delete-mapel/${id}`, {
+        .delete(`http://localhost:8000/api/delete-transaksi/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -428,7 +435,7 @@ export default {
     async fetchDataPengeluaran() {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/list-pengeluaran/1`,
+          `http://localhost:8000/api/list-pengeluaran/${this.user_id}`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -471,10 +478,10 @@ export default {
       });
     },
 
-    konfirmasi(id, nama_mapel) {
+    konfirmasi(id, nama_penerima) {
       Swal.fire({
-        title: `Apakah Anda yakin ingin menghapus Pengeluaran ${nama_mapel}?`,
-        text: "Anda akan keluar dari akun ini.",
+        title: `Konfirmasi Penghapusan`,
+        text: `Apakah Anda yakin ingin menghapus pengeluaran ke ${nama_penerima}?`,
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#d33",
@@ -483,7 +490,7 @@ export default {
         cancelButtonText: "Batal",
       }).then((result) => {
         if (result.isConfirmed) {
-          this.deleteMapel(id);
+          this.deletePengeluaran(id);
         }
       });
     },

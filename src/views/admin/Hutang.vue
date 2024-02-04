@@ -84,7 +84,8 @@ const toggleSidebar = () => {
                                   item.jumlah_hutang,
                                   item.tanggal_hutang,
                                   item.catatan,
-                                  item.tgl_jatuh_tempo
+                                  item.tgl_jatuh_tempo,
+                                  item.id
                                 )
                               "
                             >
@@ -341,15 +342,18 @@ export default {
       ready: false,
       transaksi_id: "",
       selectedPenerima: "",
+      user_id:"",
+      hutang_id:""
     };
   },
   methods: {
-    setDataUpdate(piutang, jumlah, tgl, catatan, tgl_jatuh_tempo) {
+    setDataUpdate(piutang, jumlah, tgl, catatan, tgl_jatuh_tempo, id) {
       this.formUpdateHutang.pemberi_hutang = piutang;
       this.formUpdateHutang.jumlah_hutang = jumlah;
       this.formUpdateHutang.tanggal_hutang = tgl;
       this.formUpdateHutang.tgl_jatuh_tempo = tgl_jatuh_tempo;
       this.formUpdateHutang.catatan = catatan;
+      this.hutang_id = id;
     },
     createHutang() {
       this.ready = false;
@@ -359,7 +363,7 @@ export default {
       formData.append("tanggal_hutang", this.formHutang.tanggal_hutang);
       formData.append("tgl_jatuh_tempo", this.formHutang.tgl_jatuh_tempo);
       formData.append("catatan", this.formHutang.catatan);
-      formData.append("id_user", 1);
+      formData.append("id_user", this.user_id);
 
       axios
         .post("http://localhost:8000/api/create-hutangpiutang", formData, {
@@ -394,10 +398,10 @@ export default {
       formData.append("tanggal_hutang", this.formUpdateHutang.tanggal_hutang);
       formData.append("tgl_jatuh_tempo", this.formUpdateHutang.tgl_jatuh_tempo);
       formData.append("catatan", this.formUpdateHutang.catatan);
-      formData.append("id_user", 1);
+      formData.append("id_user", this.user_id);
 
       axios
-        .post(`http://localhost:8000/api/update-hutangpiutang/1`, formData, {
+        .post(`http://localhost:8000/api/update-hutangpiutang/${this.hutang_id}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -422,11 +426,11 @@ export default {
         });
     },
 
-    deleteMapel(id) {
+    deleteHutang(id) {
       this.ready = false;
 
       axios
-        .delete(`http://localhost:8000/api/delete-mapel/${id}`, {
+        .delete(`http://localhost:8000/api/delete-hutangpiutang/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -518,9 +522,9 @@ export default {
         }
       });
     },
-    konfirmasiDelete(id, nama_mapel) {
+    konfirmasiDelete(id, nama_pemberi) {
       Swal.fire({
-        title: `Apakah Anda yakin ingin menghapus Hutang ${nama_mapel}?`,
+        title: `Apakah Anda yakin ingin menghapus hutang dari ${nama_pemberi}?`,
         text: "Anda akan keluar dari akun ini.",
         icon: "warning",
         showCancelButton: true,
@@ -530,15 +534,11 @@ export default {
         cancelButtonText: "Batal",
       }).then((result) => {
         if (result.isConfirmed) {
-          this.deleteMapel(id);
+          this.deleteHutang(id);
         }
       });
     },
 
-    setMapelId(id, nama_mapel) {
-      this.mapel_id = id;
-      this.formUpdateTransaksi.nama_mapel = nama_mapel;
-    },
   },
   computed: {
     // Metode komputasi untuk mengonversi jumlah menjadi format mata uang Rupiah

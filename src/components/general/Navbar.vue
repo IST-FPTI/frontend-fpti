@@ -33,7 +33,7 @@
           }}</span>
           <!-- <img class="img-profile rounded-circle" src="/img/nobi.jpg" /> -->
           <img
-            src="img/bagus.jpg"
+            src="../../../public/img/bagus.jpg"
             alt=" gambarprofile"
             class="img-profile rounded-circle"
           />

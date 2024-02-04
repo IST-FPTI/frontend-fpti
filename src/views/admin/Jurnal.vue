@@ -80,117 +80,10 @@ export default {
   data() {
     return {
       jurnals: [],
-      formMapel: {
-        nama_mapel: "",
-      },
-      formUpdateMapel: {
-        nama_mapel: "",
-      },
       ready: false,
-      mapel_id: "",
     };
   },
   methods: {
-    createMapel() {
-      this.ready = false;
-      const formData = new FormData();
-      formData.append("nama_mapel", this.formMapel.nama_mapel);
-
-      axios
-        .post("http://localhost:8000/api/create-mapel", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: "Bearer " + sessionStorage.getItem("token"),
-          },
-        })
-        .then((response) => {
-          console.log(response.data);
-          this.formMapel = {
-            nama_mapel: "",
-          };
-          this.showAlert(
-            "Request Success",
-            "Matapelajaran berhasil buat",
-            "success"
-          );
-          this.fetchDataJurnal();
-        })
-        .catch((error) => {
-          this.showAlert("Request Failed", "Matapelajaran gagal buat", "error");
-          console.error(error);
-          this.ready = true;
-        });
-    },
-
-    updateMapel() {
-      this.ready = false;
-      const formData = new FormData();
-      formData.append("nama_mapel", this.formUpdateMapel.nama_mapel);
-
-      axios
-        .post(
-          `http://localhost:8000/api/update-mapel/${this.mapel_id}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: "Bearer " + sessionStorage.getItem("token"),
-            },
-          }
-        )
-        .then((response) => {
-          console.log(response.data);
-          this.formMapel = {
-            nama_mapel: "",
-          };
-          this.showAlert(
-            "Request Success",
-            "Matapelajaran berhasil diupdate",
-            "success"
-          );
-          this.fetchDataJurnal();
-        })
-        .catch((error) => {
-          this.showAlert(
-            "Request Failed",
-            "Matapelajaran gagal diupdate",
-            "error"
-          );
-          console.error(error);
-          this.ready = true;
-        });
-    },
-
-    deleteMapel(id) {
-      this.ready = false;
-
-      axios
-        .delete(`http://localhost:8000/api/delete-mapel/${id}`, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: "Bearer " + sessionStorage.getItem("token"),
-          },
-        })
-        .then((response) => {
-          console.log(response.data);
-          this.showAlert(
-            "Request Success",
-            "Matapelajaran berhasil dihapus",
-            "success"
-          );
-          this.fetchDataJurnal();
-        })
-        .catch((error) => {
-          this.showAlert(
-            "Request Failed",
-            "Matapelajaran gagal dihapus",
-            "error"
-          );
-          console.error(error);
-          this.ready = true;
-        });
-    },
-
     async fetchDataJurnal() {
       try {
         const response = await axios.get(
@@ -207,39 +100,6 @@ export default {
         this.ready = true;
         console.error(error);
       }
-    },
-
-    showAlert(title, text, icon) {
-      this.$swal({
-        title: title,
-        text: text,
-        icon: icon,
-      }).then(() => {
-        $("#addMapel").modal("hide");
-        $("#editMapel").modal("hide");
-      });
-    },
-
-    konfirmasi(id, nama_mapel) {
-      Swal.fire({
-        title: `Apakah Anda yakin ingin menghapus matapelajaran ${nama_mapel}?`,
-        text: "Anda akan keluar dari akun ini.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#061387",
-        confirmButtonText: "Hapus",
-        cancelButtonText: "Batal",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.deleteMapel(id);
-        }
-      });
-    },
-
-    setMapelId(id, nama_mapel) {
-      this.mapel_id = id;
-      this.formUpdateMapel.nama_mapel = nama_mapel;
     },
   },
   created() {

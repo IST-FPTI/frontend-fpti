@@ -36,9 +36,9 @@ const toggleSidebar = () => {
                   <button
                     class="btn btn-warning me-2"
                     data-toggle="modal"
-                    data-target="#addPengeluaran"
+                    data-target="#addRealisasi"
                   >
-                    <i class="bi bi-plus-circle-fill"></i> Pengeluaran
+                    <i class="bi bi-plus-circle-fill"></i> Realisasi Anggaran
                   </button>
                 </div>
                 <div class="col-6"></div>
@@ -54,7 +54,6 @@ const toggleSidebar = () => {
                       <th scope="col">Jumlah</th>
                       <th scope="col">Tanggal</th>
                       <th scope="col">Keterangan</th>
-                      <th scope="col">Lampiran</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -66,26 +65,22 @@ const toggleSidebar = () => {
                       <td>
                         <div class="row">
                           <div class="col-6">
-                            <button
-                              type="button"
-                              class="btn btn-warning"
-                              data-toggle="modal"
-                              data-target="#editTransaksi"
-                              @click="
-                                setDataUpdate(
-                                  item.jumlah_transaksi,
-                                  item.deskripsi,
-                                  item.tgl_transaksi,
-                                  item.id_penerima
-                                )
+                            <a
+                              :href="
+                                'http://localhost:8000/storage/realisasi_anggaran/' +
+                                item.file_pdf
                               "
+                              target="_blank"
+                              class="btn btn-warning"
                             >
-                              <i class="bi bi-pencil-square"></i>
-                            </button>
+                              <i class="bi bi-eye-fill"></i>
+                            </a>
                           </div>
                           <div class="col-6">
                             <button
-                              @click="konfirmasi(item.id, item.nama_mapel)"
+                              @click="
+                                konfirmasiDelete(item.id, item.pengirim_name)
+                              "
                               class="btn btn-danger customDetail"
                             >
                               <i class="bi bi-trash3"></i>
@@ -97,25 +92,6 @@ const toggleSidebar = () => {
                       <td>{{ item.jumlah_transaksi }}</td>
                       <td>{{ item.tgl_transaksi }}</td>
                       <td>{{ item.deskripsi }}</td>
-                      <!-- <td>{{ item.file_pdf }}</td> -->
-                      <td>
-                        <!-- <embed
-                          :src="
-                            'http://localhost:8000/public/storage/realisasi_anggaran/' +
-                            item.file_pdf
-                          "
-                          type="application/pdf"
-                          width="100%"
-                          height="600px"
-                        /> -->
-                        <a
-                          :href="'http://localhost:8000/storage/realisasi_anggaran/' + item.file_pdf"
-                          target="_blank"
-                          class="btn btn-primary"
-                        >
-                          Lihat PDF
-                        </a>
-                      </td>
                     </tr>
                   </tbody>
                 </DataTable>
@@ -134,6 +110,69 @@ const toggleSidebar = () => {
     </div>
     <!-- End of Content Wrapper -->
   </div>
+
+  <!-- modal tambah jadwal -->
+  <div
+    class="modal fade"
+    id="addRealisasi"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="addRealisasiLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addRealisasiLabel">Form Pemasukan</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="ketua" class="form-label">File Laporan</label>
+              <input
+                type="file"
+                class="form-control"
+                id="mapel"
+                @change="handleFileUpload"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="ketua" class="form-label">Anggaran</label>
+              <select class="form-select" v-model="selectedAnggaran">
+                <option value="" disabled selected>Pilih Anggaran</option>
+                <option
+                  v-for="dataAnggaran in anggarans"
+                  :key="dataAnggaran.id"
+                  :value="dataAnggaran.id"
+                >
+                  {{ dataAnggaran.pengirim_name }} -
+                  {{ dataAnggaran.jumlah_transaksi }} -
+                  {{ dataAnggaran.deskripsi }}
+                </option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Batal
+          </button>
+          <button type="button" class="btn blueButton" @click="createRealisasi">
+            Simpan
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end modal tambah jadwal -->
 </template>
 <script>
 import axios from "axios";
@@ -147,10 +186,82 @@ export default {
   data() {
     return {
       realisasiAnggaran: [],
+      anggarans: [],
+      formRealisasi: {
+        file_pdf: null,
+        id_pemasukan: "",
+      },
       ready: false,
+      user_id: "",
+      selectedAnggaran: "",
     };
   },
   methods: {
+    createRealisasi() {
+      this.ready = false;
+      const formData = new FormData();
+      formData.append("file_pdf", this.formRealisasi.file_pdf);
+      formData.append("id_pemasukan", this.selectedAnggaran);
+
+      axios
+        .post("http://localhost:8000/api/create-realisasi-anggaran", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: "Bearer " + sessionStorage.getItem("token"),
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          this.formRealisasi = {
+            file_pdf: "",
+            id_pemasukan: "",
+          };
+          this.showAlert(
+            "Request Success",
+            "Laporan realisasi berhasil buat",
+            "success"
+          );
+          this.fetchDataRealisasiAnggaran();
+        })
+        .catch((error) => {
+          this.showAlert(
+            "Request Failed",
+            "Laporan realisasi gagal buat",
+            "error"
+          );
+          console.error(error);
+          this.ready = true;
+        });
+    },
+
+    deleteRealisasi(id) {
+      this.ready = false;
+      axios
+        .delete(`http://localhost:8000/api/delete-realisasi-anggaran/${id}`, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: "Bearer " + sessionStorage.getItem("token"),
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          this.showAlert(
+            "Request Success",
+            "Laporan realisasi berhasil dihapus",
+            "success"
+          );
+          this.fetchDataRealisasiAnggaran();
+        })
+        .catch((error) => {
+          this.showAlert(
+            "Request Failed",
+            "Laporan realisasi gagal dihapus",
+            "error"
+          );
+          console.error(error);
+          this.ready = true;
+        });
+    },
     async fetchDataRealisasiAnggaran() {
       try {
         const response = await axios.get(
@@ -168,9 +279,55 @@ export default {
         console.error(error);
       }
     },
+    async fetchDataAnggaran() {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/my-anggaran/${this.user_id}`,
+          {
+            headers: {
+              Authorization: "Bearer " + sessionStorage.getItem("token"),
+            },
+          }
+        );
+        this.anggarans = response.data.data;
+        this.ready = true;
+      } catch (error) {
+        this.ready = true;
+        console.error(error);
+      }
+    },
+    showAlert(title, text, icon) {
+      this.$swal({
+        title: title,
+        text: text,
+        icon: icon,
+      }).then(() => {
+        $("#addRealisasi").modal("hide");
+        $("#editRealisasi").modal("hide");
+      });
+    },
+    konfirmasiDelete(id, pengirim_name) {
+      Swal.fire({
+        title: `Konfirmasi Penghapusan`,
+        text: `Apakah Anda yakin ingin menghapus realisasi dana dari ${pengirim_name}?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#061387",
+        confirmButtonText: "Hapus",
+        cancelButtonText: "Batal",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.deleteRealisasi(id);
+        }
+      });
+    },
+    handleFileUpload(event) {
+      // Menggunakan FormData untuk mengirim file
+      this.formRealisasi.file_pdf = event.target.files[0];
+    },
   },
   computed: {
-    // Metode komputasi untuk mengonversi jumlah menjadi format mata uang Rupiah
     formatCurrency: function () {
       return function (value) {
         if (!value) return "Rp 0,00";
@@ -218,6 +375,7 @@ export default {
         }
         // success
         this.fetchDataRealisasiAnggaran();
+        this.fetchDataAnggaran();
         // akhir
       } catch (error) {
         console.error("Error decoding token:", error);
