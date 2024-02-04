@@ -1,11 +1,8 @@
 <script setup>
 import Sidebar from "../../components/admin/Sidebar.vue";
+import TimeVote from "../../components/admin/TimeVote.vue";
 import Navbar from "../../components/general/Navbar.vue";
 import Footer from "../../components/general/Footer.vue";
-import Slider from "../../components/general/Carousel.vue";
-import Card from "../../components/general/Card.vue";
-// import LineChart from "../../components/LineChart.vue";
-// import PolarChart from "../../components/PolarChart.vue";
 import { ref } from "vue";
 
 const sidebarToggled = ref(false);
@@ -26,85 +23,41 @@ const toggleSidebar = () => {
       <div id="content">
         <Navbar @toggle-sidebar="toggleSidebar" />
 
-        <!-- Begin Page Content -->
         <div class="container-fluid mt-4">
-          <h1 class="h3 mb-0 text-gray-800 text-center">Dashboard</h1>
-          <div class="row mt-3">
-            <div class="col-sm-6">
-              <Slider />
-            </div>
-            <div class="col-sm-3">
-              <Card
-                color="success"
-                header="Pemasukan"
-                :value="formatCurrency(totalPenerimaan)"
-                icon="fa-calendar"
-              />
-            </div>
-            <div class="col-sm-3">
-              <Card
-                color="danger"
-                header="Pengeluaran"
-                :value="formatCurrency(totalPengiriman)"
-                icon="fa-calendar"
-              />
-            </div>
-          </div>
-
-          <div class="row mt-4">
-            <div class="col-xl-3 col-md-6 mb-4">
-              <Card
-                color="warning"
-                header="Saldo"
-                :value="formatCurrency(saldoSaatIni)"
-                icon="fa-calendar"
-              />
-            </div>
-
-            <div class="col-xl-3 col-md-6 mb-4">
-              <Card
-                color="primary"
-                header="Lunas"
-                :value="formatCurrency(hutangSudahDibayar)"
-                icon="fa-clipboard-list"
-              />
-            </div>
-
-            <div class="col-xl-3 col-md-6 mb-4">
-              <Card
-                color="info"
-                header="Hutang"
-                :value="formatCurrency(hutangBelumDibayar)"
-                icon="fa-clipboard-list"
-              />
-            </div>
-
-            <!-- petugas -->
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div
-                        class="text-xs font-weight-bold text-warning text-uppercase mb-1"
-                      >
-                        Akun
-                      </div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">
-                        4
-                      </div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-solid fa-users fa-2x text-gray-300"></i>
-                      <!-- <i class="fas fa-comments fa-2x text-gray-300"></i> -->
-                    </div>
-                  </div>
-                </div>
+          <h1 class="h3 mb-0 text-gray-800 text-center mb-5">Buku Besar</h1>
+          <div class="row">
+            <div class="col-1"></div>
+            <div class="col-10">
+              <!-- Tabel hasil filter -->
+              <div class="table-responsive">
+                <p class="text-center" v-if="!ready">Loading...</p>
+                <DataTable class="display table table-striped" v-if="ready">
+                  <thead>
+                    <tr>
+                      <th scope="col" style="width: 50px">No</th>
+                      <th scope="col">Akun</th>
+                      <th scope="col">Total Debit</th>
+                      <th scope="col">Total Kredit</th>
+                      <th scope="col">Total Hutang</th>
+                      <th scope="col">Saldo Sekarang</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(item, index) in bukuBesar" :key="item.id">
+                      <td>{{ index + 1 }}</td>
+                      <td>{{ item.name }}</td>
+                      <td>{{ formatCurrency(item.total_pengeluaran) }}</td>
+                      <td>{{ formatCurrency(item.total_pemasukan) }}</td>
+                      <td>{{ formatCurrency(item.total_hutang) }}</td>
+                      <td>{{ formatCurrency(item.saldo) }}</td>
+                    </tr>
+                  </tbody>
+                </DataTable>
               </div>
             </div>
+            <div class="col-1"></div>
           </div>
         </div>
-        <!-- /.container-fluid -->
       </div>
       <!-- End of Main Content -->
 
@@ -117,35 +70,35 @@ const toggleSidebar = () => {
 </template>
 <script>
 import axios from "axios";
+import Swal from "sweetalert2";
+import DataTable from "datatables.net-vue3";
+import DataTablesCore from "datatables.net";
+
+DataTable.use(DataTablesCore);
+
 export default {
   data() {
     return {
-      hutangBelumDibayar: 0,
-      hutangSudahDibayar: 0,
-      saldoSaatIni: 100000,
-      totalPenerimaan: 0,
-      totalPengiriman: 0,
+      bukuBesar: [],
       ready: false,
+      user_id:""
     };
   },
   methods: {
-    async fetchDataReport() {
+    async fetchDataBukuBesar() {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/report-keuangan/1`,
+          `http://127.0.0.1:8000/api/buku-besar`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
             },
           }
         );
-        (this.hutangBelumDibayar = response.data.hutangBelumDibayar),
-          (this.hutangSudahDibayar = response.data.hutangSudahDibayar),
-          (this.saldoSaatIni = response.data.saldoSaatIni),
-          (this.totalPenerimaan = response.data.totalPenerimaan),
-          (this.totalPengiriman = response.data.totalPengiriman),
-          (this.ready = true);
+        this.bukuBesar = response.data.data;
+        this.ready = true;
       } catch (error) {
+        this.ready = true;
         console.error(error);
       }
     },
@@ -198,7 +151,7 @@ export default {
           this.$router.push("/");
         }
         // success
-        this.fetchDataReport();
+        this.fetchDataBukuBesar();
         // akhir
       } catch (error) {
         console.error("Error decoding token:", error);

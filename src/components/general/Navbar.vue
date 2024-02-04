@@ -33,7 +33,7 @@
           }}</span>
           <!-- <img class="img-profile rounded-circle" src="/img/nobi.jpg" /> -->
           <img
-            :src="'http://127.0.0.1:8000/storage/profile/' + gambar"
+            src="../../../public/img/bagus.jpg"
             alt=" gambarprofile"
             class="img-profile rounded-circle"
           />
@@ -46,8 +46,6 @@
           <router-link
             class="dropdown-item"
             to="/admin-profile"
-            data-toggle="modal"
-            data-target="#logoutModal"
           >
             <!-- <i class="fa-solid fa-user"></i> -->
             <i class="fas fa-solid fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -70,7 +68,8 @@
   <!-- End of Topbar -->
 </template>
 <script>
-
+import axios from "axios";
+import Swal from "sweetalert2";
 export default {
   // props: ["id"],
   props: {
@@ -100,7 +99,7 @@ export default {
         cancelButtonText: "Batal",
       }).then((result) => {
         if (result.isConfirmed) {
-        //   this.logout();
+          this.logout();
         }
       });
     },
@@ -157,6 +156,6 @@ export default {
   border-bottom: 5px solid #fac800;
 }
 .bgCustom {
-  background-color: #061387;
+  background-color: #b30e03;
 }
 </style>

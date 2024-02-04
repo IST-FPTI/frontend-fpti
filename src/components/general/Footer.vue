@@ -3,7 +3,7 @@
   <footer class="sticky-footer bg-gradient-light">
     <div class="container my-auto">
       <div class="copyright text-center my-auto">
-        <strong>Copyright &copy; PT. Garam(persero) 2023</strong>
+        <strong>Copyright &copy; Federasi Panjat Tembing Indonesia 2024</strong>
       </div>
     </div>
   </footer>
@@ -11,6 +11,6 @@
 </template>
 <style scoped>
 strong{
-  color: #fcf808;
+  color: black;
 }
 </style>

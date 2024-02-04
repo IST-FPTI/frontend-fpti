@@ -11,106 +11,160 @@
       href="#"
     >
       <div class="sidebar-brand-icon mt-2">
-        <img src="/img/logo.png" alt="logo" width="50" />
+        <img src="/img/logo.png" alt="logo" width="100" />
       </div>
-      <div class="sidebar-brand-text ms-3">
-        <span class="text-warning">E-</span>
-        <span class="text-primary">V</span>
-        <span class="text-warning text-lowercase">o</span>
-        <span class="text-primary text-lowercase">t</span>
-        <span class="text-warning text-lowercase">i</span>
-        <span class="text-primary text-lowercase">n</span>
-        <span class="text-warning text-lowercase">g</span>
-      </div>
+      <!-- <div class="sidebar-brand-text ms-3">
+        <span class="text-warning">Federasi Panjat Tebing Indonesia</span>
+      </div> -->
     </a>
 
     <!-- Divider -->
     <!-- <hr class="sidebar-divider my-0 mt-5"> -->
 
     <!-- Heading -->
-    <div class="sidebar-heading mt-5 text-primary">Menu</div>
+    <div class="sidebar-heading mt-5 text-black">Menu</div>
     <!-- Nav Item - Dashboard -->
     <li class="nav-item">
       <router-link
-        class="nav-link text-primary"
+        class="nav-link text-black"
         to="/admin-dashboard"
         active-class="font-weight-bold active-link"
       >
-        <i class="bi bi-speedometer2 text-primary"></i>
+        <i class="bi bi-speedometer2 text-black"></i>
         <span>Dashboard</span>
       </router-link>
     </li>
 
-    <!-- Nav Item - note -->
-    <li class="nav-item">
-      <router-link
-        class="nav-link text-primary"
-        to="/admin-candidate-list"
-        active-class="font-weight-bold text-primary active-link"
-      >
-        <i class="bi bi-journal-text text-primary"></i>
-        <span>Candidate</span>
-      </router-link>
-    </li>
 
-    <!-- Nav Item - aspirasi -->
-    <li class="nav-item">
-      <router-link
-        class="nav-link text-primary"
-        to="/admin-aspirasi"
-        active-class="font-weight-bold text-primary active-link"
-      >
-        <i class="bi bi-journal-text text-primary"></i>
-        <span>Aspirasi</span>
-      </router-link>
-    </li>
-
-    <!-- Nav Item - voter -->
-    <li class="nav-item">
-      <router-link
-        class="nav-link text-primary"
-        to="/admin-voter-list"
-        active-class="font-weight-bold text-primary active-link"
-      >
-        <i class="bi bi-journal-text text-primary"></i>
-        <span>Voter</span>
-      </router-link>
-    </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider" />
-
-    <!-- Heading -->
-    <div class="sidebar-heading text-primary">Others</div>
-
-    <!-- Nav Item - Pages Collapse Menu -->
+    <!-- Nav Item -Transaksi -->
     <li class="nav-item">
       <a
-        class="nav-link collapsed text-primary"
+        class="nav-link collapsed text-black"
         href="#"
         data-toggle="collapse"
-        data-target="#collapsePages"
+        data-target="#collapseKeuangan"
         aria-expanded="true"
-        aria-controls="collapsePages"
+        aria-controls="collapseKeuangan"
       >
-        <i class="fas fa-fw fa-folder text-primary"></i>
-        <span>Users</span>
+        <i class="bi bi-cash-coin" style="font-size:16px"></i>
+        <span style="font-weight:bold"> Transaksi</span>
       </a>
       <div
-        id="collapsePages"
+        id="collapseKeuangan"
         class="collapse"
         aria-labelledby="headingPages"
         data-parent="#accordionSidebar"
       >
         <div class="bg-white py-2 collapse-inner rounded">
-          <h6 class="collapse-header">Management Users</h6>
-          <router-link class="collapse-item" to="/admin-users">
-            <span>Data User</span>
+          <h6 class="collapse-header">Management Transaksi</h6>
+          <router-link class="collapse-item" to="/admin-pemasukan">
+            <span>Pemasukan Internal</span>
           </router-link>
-          <!-- <a class="collapse-item" href="#l">Data User</a> -->
-          <a class="collapse-item" href="#" aria-disabled="true">Disabled</a>
+          <router-link class="collapse-item" to="/admin-pemasukan-external">
+            <span>Pemasukan External</span>
+          </router-link>
+          <router-link class="collapse-item" to="/admin-pengeluaran">
+            <span>Pengeluaran</span>
+          </router-link>
         </div>
       </div>
+    </li>
+
+    <!-- Nav Item -Laporan -->
+    <li class="nav-item">
+      <a
+        class="nav-link collapsed text-black"
+        href="#"
+        data-toggle="collapse"
+        data-target="#collapseLaporan"
+        aria-expanded="true"
+        aria-controls="collapseLaporan"
+      >
+        <i class="bi bi-file-text-fill"></i>
+        <span class="fw-bold">Laporan</span>
+      </a>
+      <div
+        id="collapseLaporan"
+        class="collapse"
+        aria-labelledby="headingPages"
+        data-parent="#accordionSidebar"
+      >
+        <div class="bg-white py-2 collapse-inner rounded">
+          <h6 class="collapse-header">Laporan Keuangan</h6>
+          <router-link class="collapse-item" to="/admin-realisasi-anggaran">
+            <span>Realisasi Anggaran</span>
+          </router-link>
+        </div>
+      </div>
+    </li>
+
+    <!-- Nav Item -Hutang Piutang -->
+    <li class="nav-item">
+      <a
+        class="nav-link collapsed text-black"
+        href="#"
+        data-toggle="collapse"
+        data-target="#collapseHitungPiutang"
+        aria-expanded="true"
+        aria-controls="collapseHitungPiutang"
+      >
+        <i class="bi bi-wallet-fill"></i>
+        <span class="fw-bold">Hutang Piutang</span>
+      </a>
+      <div
+        id="collapseHitungPiutang"
+        class="collapse"
+        aria-labelledby="headingPages"
+        data-parent="#accordionSidebar"
+      >
+        <div class="bg-white py-2 collapse-inner rounded">
+          <h6 class="collapse-header">Management Hutang</h6>
+          <router-link class="collapse-item" to="/admin-hutang">
+            <span>Hutang</span>
+          </router-link>
+          <router-link class="collapse-item" to="/admin-piutang">
+            <span>Piutang</span>
+          </router-link>
+        </div>
+      </div>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider" />
+
+            <!-- Nav Item - jurnal -->
+    <li class="nav-item">
+      <router-link
+        class="nav-link text-black"
+        to="/admin-jurnal"
+        active-class="font-weight-bold text-black active-link"
+      >
+        <i class="bi bi-journal-album"></i>
+        <span>Jurnal</span>
+      </router-link>
+    </li>
+
+    <!-- Nav Item - buku besar -->
+    <li class="nav-item">
+      <router-link
+        class="nav-link text-black"
+        to="/admin-ledger"
+        active-class="font-weight-bold text-black active-link"
+      >
+        <i class="bi bi-database-fill-check"></i>
+        <span>Buku Besar</span>
+      </router-link>
+    </li>
+
+     <li class="nav-item">
+      <router-link
+        class="nav-link text-black"
+        to="/admin-user"
+        active-class="font-weight-bold text-black active-link"
+      >
+        <i class="bi bi-person-fill"></i>
+        <span>Users</span>
+      </router-link>
     </li>
 
     <!-- Divider -->
@@ -148,7 +202,7 @@ export default {
 .nav-link.active-link,
 .nav-link > i {
   font-weight: bold;
-  color: #061387 !important;
+  color: black !important;
 }
 
 .nav-link.active-link::before {
@@ -156,7 +210,7 @@ export default {
   display: block;
   width: 50%;
   height: 3px;
-  background-color: #061387;
+  background-color: black;
   position: absolute;
   bottom: 0;
 }

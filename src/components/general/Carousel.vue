@@ -6,8 +6,8 @@
           <img src="@/assets/img/person2.jpg" height="100" alt="gambar" />
         </div>
         <div class="col-sm-6">
-          <div class="carousel__item">Candidate {{ slide }}</div>
-          <div class="carousel__item">{{ slide*10 }}%</div>
+          <div class="carousel__item">Berita {{ slide }}</div>
+          <div class="carousel__item">Lorem ipsum dolor sit amet consectetur, adipisicing elit.</div>
         </div>
       </div>
     </Slide>
