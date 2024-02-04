@@ -159,7 +159,7 @@
      <li class="nav-item">
       <router-link
         class="nav-link text-black"
-        to="/admin-user"
+        to="/admin-pengguna"
         active-class="font-weight-bold text-black active-link"
       >
         <i class="bi bi-person-fill"></i>
