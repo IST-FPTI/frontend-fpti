@@ -94,6 +94,9 @@
           <router-link class="collapse-item" to="/admin-realisasi-anggaran">
             <span>Realisasi Anggaran</span>
           </router-link>
+          <router-link class="collapse-item" to="/admin-audit">
+            <span>Audit Tahunan</span>
+          </router-link>
         </div>
       </div>
     </li>
@@ -122,9 +125,9 @@
           <router-link class="collapse-item" to="/admin-hutang">
             <span>Hutang</span>
           </router-link>
-          <router-link class="collapse-item" to="/admin-piutang">
+          <!-- <router-link class="collapse-item" to="/admin-piutang">
             <span>Piutang</span>
-          </router-link>
+          </router-link> -->
         </div>
       </div>
     </li>

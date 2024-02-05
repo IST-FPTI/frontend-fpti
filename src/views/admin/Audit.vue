@@ -25,7 +25,9 @@ const toggleSidebar = () => {
 
         <!-- Begin Page Content -->
         <div class="container-fluid mt-4">
-          <h1 class="h3 mb-0 text-gray-800 text-center mb-5">List Piutang</h1>
+          <h1 class="h3 mb-0 text-gray-800 text-center mb-5">
+            Realisasi Anggaran
+          </h1>
           <div class="row">
             <div class="col-1"></div>
             <div class="col-10">
@@ -34,9 +36,9 @@ const toggleSidebar = () => {
                   <button
                     class="btn btn-warning me-2"
                     data-toggle="modal"
-                    data-target="#addMapel"
+                    data-target="#addAudit"
                   >
-                    <i class="bi bi-plus-circle-fill"></i> Ajukan
+                    <i class="bi bi-plus-circle-fill"></i> Audit
                   </button>
                 </div>
                 <div class="col-6"></div>
@@ -47,20 +49,47 @@ const toggleSidebar = () => {
                   <thead>
                     <tr>
                       <th scope="col" style="width: 50px">No</th>
-                      <th scope="col">Nominal</th>
-                      <th scope="col">Keterangan</th>
-                      <th scope="col">Tanggal Masuk</th>
-                      <th scope="col">Pengirim</th>
+                      <th scope="col">Aksi</th>
+                      <th scope="col">Auditor</th>
+                      <th scope="col">Tanggal Audit</th>
+                      <th scope="col">Tahun Anggaran</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(item, index) in pemasukan" :key="item.id">
+                    <tr
+                      v-for="(item, index) in audits"
+                      :key="item.id"
+                    >
                       <td>{{ index + 1 }}</td>
-                     
-                      <td>{{ item.jumlah_transaksi }}</td>
-                      <td>{{ item.deskripsi }}</td>
-                      <td>{{ item.tgl_transaksi }}</td>
-                      <td>{{ item.nama_pengirim }}</td>
+                      <td>
+                        <div class="row">
+                          <div class="col-6">
+                            <a
+                              :href="
+                                'http://127.0.0.1:8000/storage/audit_files/' +
+                                item.file_audit
+                              "
+                              target="_blank"
+                              class="btn btn-warning"
+                            >
+                              <i class="bi bi-eye-fill"></i>
+                            </a>
+                          </div>
+                          <div class="col-6">
+                            <button
+                              @click="
+                                konfirmasiDelete(item.id, item.tahun_anggaran)
+                              "
+                              class="btn btn-danger customDetail"
+                            >
+                              <i class="bi bi-trash3"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </td>
+                      <td>{{ item.auditor }}</td>
+                      <td>{{ item.tanggal_audit }}</td>
+                      <td>{{ item.tahun_anggaran }}</td>
                     </tr>
                   </tbody>
                 </DataTable>
@@ -83,16 +112,16 @@ const toggleSidebar = () => {
   <!-- modal tambah jadwal -->
   <div
     class="modal fade"
-    id="addMapel"
+    id="addAudit"
     tabindex="-1"
     role="dialog"
-    aria-labelledby="addMapelLabel"
+    aria-labelledby="addAuditLabel"
     aria-hidden="true"
   >
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addMapelLabel">Input Matapelajaran</h5>
+          <h5 class="modal-title" id="addAuditLabel">Form Audit</h5>
           <button
             type="button"
             class="close"
@@ -105,13 +134,41 @@ const toggleSidebar = () => {
         <div class="modal-body">
           <form>
             <div class="mb-3">
-              <label for="ketua" class="form-label">Matapelajaran</label>
+              <label for="auditor" class="form-label">Auditor</label>
               <input
                 type="text"
                 class="form-control"
+                id="auditor"
+                placeholder="masukkan auditor"
+                v-model="formAudit.auditor"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="tanggalAudit" class="form-label">Tanggal Audit</label>
+              <input
+                type="date"
+                class="form-control"
+                id="tanggalAudit"
+                v-model="formAudit.tanggal_audit"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="tahunAnggaran" class="form-label">Tahun Anggaran</label>
+              <input
+                type="text"
+                class="form-control"
+                id="tahunAnggaran"
+                placeholder="masukkan tahun anggaran"
+                v-model="formAudit.tahun_anggaran"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="ketua" class="form-label">File Audit</label>
+              <input
+                type="file"
+                class="form-control"
                 id="mapel"
-                placeholder="masukkan nama mapel"
-                v-model="formMapel.nama_mapel"
+                @change="handleFileUpload"
               />
             </div>
           </form>
@@ -120,7 +177,7 @@ const toggleSidebar = () => {
           <button type="button" class="btn btn-secondary" data-dismiss="modal">
             Batal
           </button>
-          <button type="button" class="btn blueButton" @click="createMapel">
+          <button type="button" class="btn blueButton" @click="createAudit">
             Simpan
           </button>
         </div>
@@ -128,55 +185,6 @@ const toggleSidebar = () => {
     </div>
   </div>
   <!-- end modal tambah jadwal -->
-
-  <!-- modal edit kelas -->
-  <div
-    class="modal fade"
-    id="editMapel"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="editMapelLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="editMapelLabel">Edit Matapelajaran</h5>
-          <button
-            type="button"
-            class="close"
-            data-dismiss="modal"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="mb-3">
-              <label for="ketua" class="form-label">Matapelajaran</label>
-              <input
-                type="text"
-                class="form-control"
-                id="mapel"
-                placeholder="masukkan nama mapel"
-                v-model="formUpdateMapel.nama_mapel"
-              />
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">
-            Batal
-          </button>
-          <button type="button" class="btn blueButton" @click="updateMapel">
-            Simpan
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- end modal edit kelas -->
 </template>
 <script>
 import axios from "axios";
@@ -189,85 +197,30 @@ DataTable.use(DataTablesCore);
 export default {
   data() {
     return {
-      pemasukan: [],
-      formMapel: {
-        nama_mapel: "",
-      },
-      formUpdateMapel: {
-        nama_mapel: "",
+      audits: [],
+      anggarans: [],
+      formAudit: {
+        auditor: "",
+        tanggal_audit: "",
+        tahun_anggaran: "",
+        file_audit: null,
       },
       ready: false,
-      mapel_id: "",
+      user_id: "",
+      selectedAnggaran: "",
     };
   },
   methods: {
-    createMapel() {
+    createAudit() {
       this.ready = false;
       const formData = new FormData();
-      formData.append("nama_mapel", this.formMapel.nama_mapel);
+      formData.append("auditor", this.formAudit.auditor);
+      formData.append("tanggal_audit", this.formAudit.tanggal_audit);
+      formData.append("tahun_anggaran", this.formAudit.tahun_anggaran);
+      formData.append("file_audit", this.formAudit.file_audit);
 
       axios
-        .post("http://localhost:8000/api/create-mapel", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: "Bearer " + sessionStorage.getItem("token"),
-          },
-        })
-        .then((response) => {
-          console.log(response.data);
-          this.formMapel = {
-            nama_mapel: "",
-          };
-          this.showAlert("Request Success", "Matapelajaran berhasil buat", "success");
-          this.fetchDataPemasukan();
-        })
-        .catch((error) => {
-          this.showAlert("Request Failed", "Matapelajaran gagal buat", "error");
-          console.error(error);
-          this.ready = true;
-        });
-    },
-
-    updateMapel() {
-      this.ready = false;
-      const formData = new FormData();
-      formData.append("nama_mapel", this.formUpdateMapel.nama_mapel);
-
-      axios
-        .post(
-          `http://localhost:8000/api/update-mapel/${this.mapel_id}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: "Bearer " + sessionStorage.getItem("token"),
-            },
-          }
-        )
-        .then((response) => {
-          console.log(response.data);
-          this.formMapel = {
-            nama_mapel: "",
-          };
-          this.showAlert(
-            "Request Success",
-            "Matapelajaran berhasil diupdate",
-            "success"
-          );
-          this.fetchDataPemasukan();
-        })
-        .catch((error) => {
-          this.showAlert("Request Failed", "Matapelajaran gagal diupdate", "error");
-          console.error(error);
-          this.ready = true;
-        });
-    },
-
-    deleteMapel(id) {
-      this.ready = false;
-
-      axios
-        .delete(`http://localhost:8000/api/delete-mapel/${id}`, {
+        .post("http://127.0.0.1:8000/api/create-audit", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -277,50 +230,81 @@ export default {
           console.log(response.data);
           this.showAlert(
             "Request Success",
-            "Matapelajaran berhasil dihapus",
+            "Audit berhasil buat",
             "success"
           );
-          this.fetchDataPemasukan();
+          this.fetchDataAudit();
         })
         .catch((error) => {
-          this.showAlert("Request Failed", "Matapelajaran gagal dihapus", "error");
+          this.showAlert(
+            "Request Failed",
+            "Audit gagal buat",
+            "error"
+          );
           console.error(error);
           this.ready = true;
         });
     },
 
-    async fetchDataPemasukan() {
+    deleteAudit(id) {
+      this.ready = false;
+      axios
+        .delete(`http://127.0.0.1:8000/api/delete-audit/${id}`, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: "Bearer " + sessionStorage.getItem("token"),
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          this.showAlert(
+            "Request Success",
+            "Audit berhasil dihapus",
+            "success"
+          );
+          this.fetchDataAudit();
+        })
+        .catch((error) => {
+          this.showAlert(
+            "Request Failed",
+            "Audit gagal dihapus",
+            "error"
+          );
+          console.error(error);
+          this.ready = true;
+        });
+    },
+    async fetchDataAudit() {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/list-pemasukan/2`,
+          `http://127.0.0.1:8000/api/list-audit`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
             },
           }
         );
-        this.pemasukan = response.data.data;
+        this.audits = response.data.data;
         this.ready = true;
       } catch (error) {
+        this.ready = true;
         console.error(error);
       }
     },
-
     showAlert(title, text, icon) {
       this.$swal({
         title: title,
         text: text,
         icon: icon,
       }).then(() => {
-        $("#addMapel").modal("hide");
-        $("#editMapel").modal("hide");
+        $("#addAudit").modal("hide");
+        $("#editRealisasi").modal("hide");
       });
     },
-
-    konfirmasi(id, nama_mapel) {
+    konfirmasiDelete(id, tahun_anggaran) {
       Swal.fire({
-        title: `Apakah Anda yakin ingin menghapus matapelajaran ${nama_mapel}?`,
-        text: "Anda akan keluar dari akun ini.",
+        title: `Konfirmasi Penghapusan`,
+        text: `Apakah Anda yakin ingin menghapus laporan audit tahun ${tahun_anggaran}?`,
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#d33",
@@ -329,17 +313,31 @@ export default {
         cancelButtonText: "Batal",
       }).then((result) => {
         if (result.isConfirmed) {
-          this.deleteMapel(id);
+          this.deleteAudit(id);
         }
       });
     },
-
-    setMapelId(id, nama_mapel) {
-      this.mapel_id = id;
-      this.formUpdateMapel.nama_mapel = nama_mapel;
+    handleFileUpload(event) {
+      // Menggunakan FormData untuk mengirim file
+      this.formAudit.file_audit = event.target.files[0];
     },
   },
-    created() {
+  computed: {
+    formatCurrency: function () {
+      return function (value) {
+        if (!value) return "Rp 0,00";
+
+        // Mengonversi nilai ke dalam format Rupiah
+        let formattedValue = new Intl.NumberFormat("id-ID", {
+          style: "currency",
+          currency: "IDR",
+        }).format(value);
+
+        return formattedValue;
+      };
+    },
+  },
+  created() {
     const token = sessionStorage.getItem("token"); // Ambil token dari local storage
 
     if (token) {
@@ -371,7 +369,7 @@ export default {
           this.$router.push("/");
         }
         // success
-        this.fetchDataPemasukan();
+        this.fetchDataAudit();
         // akhir
       } catch (error) {
         console.error("Error decoding token:", error);

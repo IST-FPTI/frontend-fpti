@@ -34,9 +34,9 @@ const router = createRouter({
       component: () => import('../views/admin/Hutang.vue')
     },
     {
-      path: '/admin-piutang',
-      name: 'admin-piutang',
-      component: () => import('../views/admin/Piutang.vue')
+      path: '/admin-audit',
+      name: 'admin-audit',
+      component: () => import('../views/admin/Audit.vue')
     },
     {
       path: '/admin-jurnal',
@@ -57,6 +57,11 @@ const router = createRouter({
       path: '/admin-pengguna',
       name: 'admin-pengguna',
       component: () => import('../views/admin/User.vue')
+    },
+    {
+      path: '/admin-profile',
+      name: 'admin-profile',
+      component: () => import('../views/admin/Profile.vue')
     },
 
     
