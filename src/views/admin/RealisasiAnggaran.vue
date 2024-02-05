@@ -89,7 +89,7 @@ const toggleSidebar = () => {
                         </div>
                       </td>
                       <td>{{ item.pengirim_name }}</td>
-                      <td>{{ item.jumlah_transaksi }}</td>
+                      <td>{{ formatCurrency(item.jumlah_transaksi) }}</td>
                       <td>{{ item.tgl_transaksi }}</td>
                       <td>{{ item.deskripsi }}</td>
                     </tr>
@@ -290,7 +290,6 @@ export default {
           }
         );
         this.anggarans = response.data.data;
-        this.ready = true;
       } catch (error) {
         this.ready = true;
         console.error(error);
