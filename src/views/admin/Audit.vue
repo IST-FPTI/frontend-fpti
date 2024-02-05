@@ -66,7 +66,7 @@ const toggleSidebar = () => {
                           <div class="col-6">
                             <a
                               :href="
-                                'http://127.0.0.1:8000/storage/audit_files/' +
+                                'https://backend.keuanganfpti.com/storage/audit_files/' +
                                 item.file_audit
                               "
                               target="_blank"
@@ -220,7 +220,7 @@ export default {
       formData.append("file_audit", this.formAudit.file_audit);
 
       axios
-        .post("http://127.0.0.1:8000/api/create-audit", formData, {
+        .post("https://backend.keuanganfpti.com/api/create-audit", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -249,7 +249,7 @@ export default {
     deleteAudit(id) {
       this.ready = false;
       axios
-        .delete(`http://127.0.0.1:8000/api/delete-audit/${id}`, {
+        .delete(`https://backend.keuanganfpti.com/api/delete-audit/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -277,7 +277,7 @@ export default {
     async fetchDataAudit() {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/list-audit`,
+          `https://backend.keuanganfpti.com/api/list-audit`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
