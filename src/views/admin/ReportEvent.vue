@@ -5,7 +5,7 @@
             <div class="col-10">
               <div class="row">
                 <div class="col-6">
-                  <router-link to="/user-note" class="btn btn-danger mb-5"
+                  <router-link to="/admin-event" class="btn btn-danger mb-5"
                     >Kembali</router-link
                   >
                 </div>
@@ -23,7 +23,7 @@
           </div>
           <div id="element-to-convert">
                 <div class="row">
-                <h1 class="text-center mb-5">Federasi Panjat Tebing Indonesia</h1>
+                <h1 class="text-center mb-5 text-white">Federasi Panjat Tebing Indonesia</h1>
                 </div>
             <div class="report-container">
                 <!-- Tabel Event -->
