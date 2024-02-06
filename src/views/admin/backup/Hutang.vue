@@ -25,9 +25,7 @@ const toggleSidebar = () => {
 
         <!-- Begin Page Content -->
         <div class="container-fluid mt-4">
-          <h1 class="h3 mb-0 text-gray-800 text-center mb-5">
-            Data Pengeluaran
-          </h1>
+          <h1 class="h3 mb-0 text-gray-800 text-center mb-5">List Hutang</h1>
           <div class="row">
             <div class="col-1"></div>
             <div class="col-10">
@@ -36,9 +34,9 @@ const toggleSidebar = () => {
                   <button
                     class="btn btn-warning me-2"
                     data-toggle="modal"
-                    data-target="#addPengeluaran"
+                    data-target="#addHutang"
                   >
-                    <i class="bi bi-plus-circle-fill"></i> Buat Pengeluaran
+                    <i class="bi bi-plus-circle-fill"></i> Hutang
                   </button>
                 </div>
                 <div class="col-6"></div>
@@ -50,27 +48,43 @@ const toggleSidebar = () => {
                     <tr>
                       <th scope="col" style="width: 50px">No</th>
                       <th scope="col">Aksi</th>
-                      <th scope="col">Kebutuhan</th>
-                      <th scope="col">Jumlah Pengeluaranr</th>
-                      <th scope="col">Deskripsi Pengeluaran</th>
+                      <th scope="col">Piutang</th>
+                      <th scope="col">Jumlah</th>
+                      <th scope="col">Tanggal</th>
+                      <th scope="col">Jatuh Tempo</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Catatan</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(item, index) in pengeluarans" :key="item.id">
+                    <tr v-for="(item, index) in hutangs" :key="item.id">
                       <td>{{ index + 1 }}</td>
                       <td>
                         <div class="row">
-                          <div class="col-6">
+                          <div class="col-4">
+                            <button
+                              type="button"
+                              class="btn btn-success"
+                              @click="
+                                konfirmasiBayar(item.id, item.pemberi_hutang)
+                              "
+                            >
+                              <i class="bi bi-cash-coin"></i>
+                            </button>
+                          </div>
+                          <div class="col-4">
                             <button
                               type="button"
                               class="btn btn-warning"
                               data-toggle="modal"
-                              data-target="#editPengeluaran"
+                              data-target="#editTransaksi"
                               @click="
                                 setDataUpdate(
-                                  item.keperluan_pengeluaran,
-                                  item.jumlah_pengeluaran,
-                                  item.deskripsi_pengeluaran,
+                                  item.pemberi_hutang,
+                                  item.jumlah_hutang,
+                                  item.tanggal_hutang,
+                                  item.catatan,
+                                  item.tgl_jatuh_tempo,
                                   item.id
                                 )
                               "
@@ -78,9 +92,11 @@ const toggleSidebar = () => {
                               <i class="bi bi-pencil-square"></i>
                             </button>
                           </div>
-                          <div class="col-6">
+                          <div class="col-4">
                             <button
-                              @click="konfirmasi(item.id, item.keperluan_pengeluaran)"
+                              @click="
+                                konfirmasiDelete(item.id, item.pemberi_hutang)
+                              "
                               class="btn btn-danger customDetail"
                             >
                               <i class="bi bi-trash3"></i>
@@ -88,9 +104,22 @@ const toggleSidebar = () => {
                           </div>
                         </div>
                       </td>
-                      <td>{{ item.keperluan_pengeluaran }}</td>
-                      <td>{{ item.jumlah_pengeluaran }}</td>
-                      <td>{{ item.deskripsi_pengeluaran }}</td>
+                      <td>{{ item.pemberi_hutang }}</td>
+                      <td>{{ formatCurrency(item.jumlah_hutang) }}</td>
+
+                      <td>{{ item.tanggal_hutang }}</td>
+                      <td>{{ item.tgl_jatuh_tempo }}</td>
+                      <td>
+                        <i
+                          v-if="item.status == '0'"
+                          class="bi bi-hourglass-split fs-5 text-danger"
+                        ></i>
+                        <i
+                          v-if="item.status == '1'"
+                          class="bi bi-check-circle-fill fs-5 text-success"
+                        ></i>
+                      </td>
+                      <td>{{ item.catatan }}</td>
                     </tr>
                   </tbody>
                 </DataTable>
@@ -113,18 +142,16 @@ const toggleSidebar = () => {
   <!-- modal tambah transaksi -->
   <div
     class="modal fade"
-    id="addPengeluaran"
+    id="addHutang"
     tabindex="-1"
     role="dialog"
-    aria-labelledby="addPengeluaranLabel"
+    aria-labelledby="addHutangLabel"
     aria-hidden="true"
   >
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addPengeluaranLabel">
-            Buat Event Baru
-          </h5>
+          <h5 class="modal-title" id="addHutangLabel">Masukkan Hutang</h5>
           <button
             type="button"
             class="close"
@@ -137,57 +164,60 @@ const toggleSidebar = () => {
         <div class="modal-body">
           <form>
             <div class="mb-3">
-              <label for="ketua" class="form-label">Kebutuhan</label>
+              <label for="ketua" class="form-label">Piutang</label>
               <input
                 type="text"
                 class="form-control"
                 id="mapel"
-                placeholder="masukkan kebutuhan"
-                v-model="formPengeluaran.keperluan_pengeluaran"
+                placeholder="masukkan pemberi hutang"
+                v-model="formHutang.pemberi_hutang"
               />
             </div>
             <div class="mb-3">
-              <label for="ketua" class="form-label">Jumlah Pengeluaran</label>
+              <label for="ketua" class="form-label">Jumlah Hutang</label>
               <input
-                type="text"
+                type="number"
                 class="form-control"
                 id="mapel"
-                placeholder="masukkan jumlah pengeluaran"
-                v-model="formPengeluaran.jumlah_pengeluaran"
+                placeholder="masukkan nominal hutang"
+                v-model="formHutang.jumlah_hutang"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="ketua" class="form-label">Tanggal Hutang</label>
+              <input
+                type="date"
+                class="form-control"
+                id="mapel"
+                v-model="formHutang.tanggal_hutang"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="ketua" class="form-label">Tanggal Jatuh Tempo</label>
+              <input
+                type="date"
+                class="form-control"
+                id="mapel"
+                v-model="formHutang.tgl_jatuh_tempo"
               />
             </div>
 
-             <div class="mb-3">
-              <label for="mission" class="form-label">Events</label>
-              <select class="form-select" v-model="selectedEvent">
-                <option value="" disabled selected>Pilih Event</option>
-                <option
-                  v-for="dataEvent in events"
-                  :key="dataEvent.id"
-                  :value="dataEvent.id"
-                >
-                  {{ dataEvent.nama_event }} - {{dataEvent.tanggal_event}}
-                </option>
-              </select>
-            </div>
-
             <div class="mb-3">
-              <label for="keterangan" class="form-label">Deskripsi</label>
+              <label for="keterangan" class="form-label">Catatan</label>
               <textarea
                 class="form-control"
                 id="keterangan"
-                placeholder="Masukkan deskripsi"
-                v-model="formPengeluaran.deskripsi_pengeluaran"
+                placeholder="Masukkan keterangan"
+                v-model="formHutang.catatan"
               ></textarea>
             </div>
-            
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">
             Batal
           </button>
-          <button type="button" class="btn blueButton" @click="createPengeluaran">
+          <button type="button" class="btn blueButton" @click="createHutang">
             Simpan
           </button>
         </div>
@@ -199,16 +229,16 @@ const toggleSidebar = () => {
   <!-- modal edit transaksi -->
   <div
     class="modal fade"
-    id="editPengeluaran"
+    id="editTransaksi"
     tabindex="-1"
     role="dialog"
-    aria-labelledby="editPengeluaranLabel"
+    aria-labelledby="editTransaksiLabel"
     aria-hidden="true"
   >
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="editPengeluaranLabel">Edit Pengeluaran</h5>
+          <h5 class="modal-title" id="editTransaksiLabel">Edit Pengeluaran</h5>
           <button
             type="button"
             class="close"
@@ -221,57 +251,60 @@ const toggleSidebar = () => {
         <div class="modal-body">
           <form>
             <div class="mb-3">
-              <label for="ketua" class="form-label">Kebutuhan</label>
+              <label for="ketua" class="form-label">Piutang</label>
               <input
                 type="text"
                 class="form-control"
                 id="mapel"
-                placeholder="masukkan kebutuhan"
-                v-model="formUpdatePengeluaran.keperluan_pengeluaran"
+                placeholder="masukkan pemberi hutang"
+                v-model="formUpdateHutang.pemberi_hutang"
               />
             </div>
             <div class="mb-3">
-              <label for="ketua" class="form-label">Jumlah Pengeluaran</label>
+              <label for="ketua" class="form-label">Jumlah Hutang</label>
               <input
-                type="text"
+                type="number"
                 class="form-control"
                 id="mapel"
-                placeholder="masukkan jumlah pengeluaran"
-                v-model="formUpdatePengeluaran.jumlah_pengeluaran"
+                placeholder="masukkan nominal hutang"
+                v-model="formUpdateHutang.jumlah_hutang"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="ketua" class="form-label">Tanggal Hutang</label>
+              <input
+                type="date"
+                class="form-control"
+                id="mapel"
+                v-model="formUpdateHutang.tanggal_hutang"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="ketua" class="form-label">Tanggal Jatuh Tempo</label>
+              <input
+                type="date"
+                class="form-control"
+                id="mapel"
+                v-model="formUpdateHutang.tgl_jatuh_tempo"
               />
             </div>
 
-             <div class="mb-3">
-              <label for="mission" class="form-label">Events</label>
-              <select class="form-select" v-model="selectedEvent">
-                <option value="" disabled selected>Pilih Event</option>
-                <option
-                  v-for="dataEvent in events"
-                  :key="dataEvent.id"
-                  :value="dataEvent.id"
-                >
-                  {{ dataEvent.nama_event }} - {{dataEvent.tanggal_event}}
-                </option>
-              </select>
-            </div>
-
             <div class="mb-3">
-              <label for="keterangan" class="form-label">Deskripsi</label>
+              <label for="keterangan" class="form-label">Catatan</label>
               <textarea
                 class="form-control"
                 id="keterangan"
-                placeholder="Masukkan deskripsi"
-                v-model="formUpdatePengeluaran.deskripsi_pengeluaran"
+                placeholder="Masukkan keterangan"
+                v-model="formUpdateHutang.catatan"
               ></textarea>
             </div>
-            
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">
             Batal
           </button>
-          <button type="button" class="btn blueButton" @click="updatePengeluaran">
+          <button type="button" class="btn blueButton" @click="updateHutang">
             Simpan
           </button>
         </div>
@@ -291,41 +324,49 @@ DataTable.use(DataTablesCore);
 export default {
   data() {
     return {
-      pengeluarans: [],
-      events:[],
-      formPengeluaran: {
-        keperluan_pengeluaran: "",
-        jumlah_pengeluaran: "",
-        deskripsi_pengeluaran: "",
+      hutangs: [],
+      formHutang: {
+        pemberi_hutang: "",
+        jumlah_hutang: "",
+        tanggal_hutang: "",
+        tgl_jatuh_tempo:"",
+        catatan: "",
       },
-      formUpdatePengeluaran: {
-        keperluan_pengeluaran: "",
-        jumlah_pengeluaran: "",
-        deskripsi_pengeluaran: "",
-        id_pengeluaran:""
+      formUpdateHutang: {
+        pemberi_hutang: "",
+        jumlah_hutang: "",
+        tanggal_hutang: "",
+        tgl_jatuh_tempo: "",
+        catatan: "",
       },
       ready: false,
-      selectedEvent:"",
-      user_id:""
+      transaksi_id: "",
+      selectedPenerima: "",
+      user_id:"",
+      hutang_id:""
     };
   },
   methods: {
-    setDataUpdate(keperluan_pengeluaran, jumlah_pengeluaran, deskripsi_pengeluaran, id) {
-      this.formUpdatePengeluaran.keperluan_pengeluaran = keperluan_pengeluaran;
-      this.formUpdatePengeluaran.jumlah_pengeluaran = jumlah_pengeluaran;
-      this.formUpdatePengeluaran.deskripsi_pengeluaran = deskripsi_pengeluaran;
-      this.formUpdatePengeluaran.id_pengeluaran = id;
+    setDataUpdate(piutang, jumlah, tgl, catatan, tgl_jatuh_tempo, id) {
+      this.formUpdateHutang.pemberi_hutang = piutang;
+      this.formUpdateHutang.jumlah_hutang = jumlah;
+      this.formUpdateHutang.tanggal_hutang = tgl;
+      this.formUpdateHutang.tgl_jatuh_tempo = tgl_jatuh_tempo;
+      this.formUpdateHutang.catatan = catatan;
+      this.hutang_id = id;
     },
-    createPengeluaran() {
+    createHutang() {
       this.ready = false;
       const formData = new FormData();
-      formData.append("keperluan_pengeluaran", this.formPengeluaran.keperluan_pengeluaran);
-      formData.append("jumlah_pengeluaran", this.formPengeluaran.jumlah_pengeluaran);
-      formData.append("deskripsi_pengeluaran", this.formPengeluaran.deskripsi_pengeluaran);
-      formData.append("id_event", this.selectedEvent);
+      formData.append("pemberi_hutang", this.formHutang.pemberi_hutang);
+      formData.append("jumlah_hutang", this.formHutang.jumlah_hutang);
+      formData.append("tanggal_hutang", this.formHutang.tanggal_hutang);
+      formData.append("tgl_jatuh_tempo", this.formHutang.tgl_jatuh_tempo);
+      formData.append("catatan", this.formHutang.catatan);
+      formData.append("id_user", this.user_id);
 
       axios
-        .post("https://backend.keuanganfpti.com/api/create-pengeluaran", formData, {
+        .post("https://backend.keuanganfpti.com/api/create-hutangpiutang", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -333,70 +374,63 @@ export default {
         })
         .then((response) => {
           console.log(response.data);
-          this.formPengeluaran = {
-            pemberi_sponsor: "",
-            dana_sponsor: "",
-            deskripsi_sponsor: "",
-            selectedEvent: "",
+          this.formHutang = {
+            jumlah_transaksi: "",
+            deskripsi: "",
+            tgl_transaksi: "",
+            selectedPenerima: "",
+          };
+          this.showAlert("Request Success", "Hutang berhasil buat", "success");
+          this.fetchDataHutang();
+        })
+        .catch((error) => {
+          this.showAlert("Request Failed", "Hutang gagal buat", "error");
+          console.error(error);
+          this.ready = true;
+        });
+    },
+
+    updateHutang() {
+      this.ready = false;
+      const formData = new FormData();
+      formData.append("pemberi_hutang", this.formUpdateHutang.pemberi_hutang);
+      formData.append("jumlah_hutang", this.formUpdateHutang.jumlah_hutang);
+      formData.append("tanggal_hutang", this.formUpdateHutang.tanggal_hutang);
+      formData.append("tgl_jatuh_tempo", this.formUpdateHutang.tgl_jatuh_tempo);
+      formData.append("catatan", this.formUpdateHutang.catatan);
+      formData.append("id_user", this.user_id);
+
+      axios
+        .post(`https://backend.keuanganfpti.com/api/update-hutangpiutang/${this.hutang_id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: "Bearer " + sessionStorage.getItem("token"),
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          this.formHutang = {
+            nama_mapel: "",
           };
           this.showAlert(
             "Request Success",
-            "Sponsor berhasil buat",
+            "Hutang berhasil diupdate",
             "success"
           );
-          this.fetchDataSponsor();
+          this.fetchDataHutang();
         })
         .catch((error) => {
-          this.showAlert("Request Failed", "Sponsor gagal buat", "error");
+          this.showAlert("Request Failed", "Hutang gagal diupdate", "error");
           console.error(error);
           this.ready = true;
         });
     },
 
-    updatePengeluaran() {
-      this.ready = false;
-      const formData = new FormData();
-    formData.append("keperluan_pengeluaran", this.formUpdatePengeluaran.keperluan_pengeluaran);
-      formData.append("jumlah_pengeluaran", this.formUpdatePengeluaran.jumlah_pengeluaran);
-      formData.append("deskripsi_pengeluaran", this.formUpdatePengeluaran.deskripsi_pengeluaran);
-      formData.append("id_event", this.selectedEvent); 
-
-      axios
-        .post(
-          `https://backend.keuanganfpti.com/api/update-pengeluaran/${this.formUpdatePengeluaran.id_pengeluaran}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: "Bearer " + sessionStorage.getItem("token"),
-            },
-          }
-        )
-        .then((response) => {
-          console.log(response.data);
-          this.showAlert(
-            "Request Success",
-            "Sponsor berhasil diupdate",
-            "success"
-          );
-          this.fetchDataSponsor();
-        })
-        .catch((error) => {
-          this.showAlert(
-            "Request Failed",
-            "Sponsor gagal diupdate",
-            "error"
-          );
-          console.error(error);
-          this.ready = true;
-        });
-    },
-
-    deletePengeluaran(id) {
+    deleteHutang(id) {
       this.ready = false;
 
       axios
-        .delete(`https://backend.keuanganfpti.com/api/delete-pengeluaran/${id}`, {
+        .delete(`https://backend.keuanganfpti.com/api/delete-hutangpiutang/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -406,53 +440,58 @@ export default {
           console.log(response.data);
           this.showAlert(
             "Request Success",
-            "Sponsor berhasil dihapus",
+            "Hutang berhasil dihapus",
             "success"
           );
-          this.fetchDataSponsor();
+          this.fetchDataHutang();
         })
         .catch((error) => {
-          this.showAlert(
-            "Request Failed",
-            "Sponsor gagal dihapus",
-            "error"
-          );
+          this.showAlert("Request Failed", "Hutang gagal dihapus", "error");
           console.error(error);
           this.ready = true;
         });
     },
 
-    async fetchDataSponsor() {
+    async fetchDataHutang() {
       try {
         const response = await axios.get(
-          `https://backend.keuanganfpti.com/api/list-pengeluaran`,
+          `https://backend.keuanganfpti.com/api/list-hutangpiutang`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
             },
           }
         );
-        this.pengeluarans = response.data.data;
+        this.hutangs = response.data.data;
         this.ready = true;
       } catch (error) {
-        this.ready = true;
         console.error(error);
       }
     },
 
-        async fetchDataActiveEvent() {
+    async bayarHutang(id) {
       try {
-        const response = await axios.get(
-          `https://backend.keuanganfpti.com/api/event-active`,
+        const response = await axios.post(
+          `https://backend.keuanganfpti.com/api/bayar-hutangpiutang/${id}`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
             },
           }
         );
-        this.events = response.data.data;
+        this.showAlert(
+          "Request Success",
+          "Hutang berhasil dibayarkan",
+          "success"
+        );
+        this.ready = true;
       } catch (error) {
         console.error(error);
+        this.showAlert(
+          "Request Failed",
+          "Gagal membayar hutang, pastikan saldo anda cukup",
+          "error"
+        );
       }
     },
 
@@ -462,15 +501,31 @@ export default {
         text: text,
         icon: icon,
       }).then(() => {
-        $("#addPengeluaran").modal("hide");
-        $("#editPengeluaran").modal("hide");
+        $("#addHutang").modal("hide");
+        $("#editTransaksi").modal("hide");
       });
     },
 
-    konfirmasi(id, keperluan_pengeluaran) {
+    konfirmasiBayar(id, piutang) {
       Swal.fire({
-        title: `Konfirmasi Penghapusan`,
-        text: `Apakah Anda yakin ingin menghapus pengeluaran ${keperluan_pengeluaran}?`,
+        title: `Apakah Anda yakin ingin membayar Hutang ke ${piutang}?`,
+        text: "Pastikan saldo anda cukup.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#fac800",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Bayar",
+        cancelButtonText: "Batal",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.bayarHutang(id);
+        }
+      });
+    },
+    konfirmasiDelete(id, nama_pemberi) {
+      Swal.fire({
+        title: `Apakah Anda yakin ingin menghapus hutang dari ${nama_pemberi}?`,
+        text: "Anda akan keluar dari akun ini.",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#d33",
@@ -479,10 +534,11 @@ export default {
         cancelButtonText: "Batal",
       }).then((result) => {
         if (result.isConfirmed) {
-          this.deletePengeluaran(id);
+          this.deleteHutang(id);
         }
       });
     },
+
   },
   computed: {
     // Metode komputasi untuk mengonversi jumlah menjadi format mata uang Rupiah
@@ -532,8 +588,7 @@ export default {
           this.$router.push("/");
         }
         // success
-        this.fetchDataSponsor();
-        this.fetchDataActiveEvent();
+        this.fetchDataHutang();
         // akhir
       } catch (error) {
         console.error("Error decoding token:", error);

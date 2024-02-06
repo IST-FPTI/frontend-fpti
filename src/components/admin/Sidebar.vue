@@ -47,7 +47,7 @@
         aria-controls="collapseKeuangan"
       >
         <i class="bi bi-cash-coin" style="font-size:16px"></i>
-        <span style="font-weight:bold"> Transaksi</span>
+        <span style="font-weight:bold">Events</span>
       </a>
       <div
         id="collapseKeuangan"
@@ -56,12 +56,12 @@
         data-parent="#accordionSidebar"
       >
         <div class="bg-white py-2 collapse-inner rounded">
-          <h6 class="collapse-header">Management Transaksi</h6>
-          <router-link class="collapse-item" to="/admin-pemasukan">
-            <span>Pemasukan Internal</span>
+          <h6 class="collapse-header">Management Event</h6>
+          <router-link class="collapse-item" to="/admin-event">
+            <span>Event</span>
           </router-link>
-          <router-link class="collapse-item" to="/admin-pemasukan-external">
-            <span>Pemasukan External</span>
+          <router-link class="collapse-item" to="/admin-sponsor">
+            <span>Sponsor</span>
           </router-link>
           <router-link class="collapse-item" to="/admin-pengeluaran">
             <span>Pengeluaran</span>
@@ -125,9 +125,9 @@
           <router-link class="collapse-item" to="/admin-hutang">
             <span>Hutang</span>
           </router-link>
-          <!-- <router-link class="collapse-item" to="/admin-piutang">
+          <router-link class="collapse-item" to="/admin-piutang">
             <span>Piutang</span>
-          </router-link> -->
+          </router-link>
         </div>
       </div>
     </li>

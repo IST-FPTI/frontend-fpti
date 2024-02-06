@@ -122,7 +122,7 @@ export default {
     return {
       hutangBelumDibayar: 0,
       hutangSudahDibayar: 0,
-      saldoSaatIni: 100000,
+      saldoSaatIni: 0,
       totalPenerimaan: 0,
       totalPengiriman: 0,
       ready: false,
@@ -199,7 +199,7 @@ export default {
           this.$router.push("/");
         }
         // success
-        this.fetchDataReport();
+        // this.fetchDataReport();
         // akhir
       } catch (error) {
         console.error("Error decoding token:", error);

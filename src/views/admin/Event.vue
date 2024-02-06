@@ -25,9 +25,7 @@ const toggleSidebar = () => {
 
         <!-- Begin Page Content -->
         <div class="container-fluid mt-4">
-          <h1 class="h3 mb-0 text-gray-800 text-center mb-5">
-            Data Pengeluaran
-          </h1>
+          <h1 class="h3 mb-0 text-gray-800 text-center mb-5">Data Event</h1>
           <div class="row">
             <div class="col-1"></div>
             <div class="col-10">
@@ -36,9 +34,9 @@ const toggleSidebar = () => {
                   <button
                     class="btn btn-warning me-2"
                     data-toggle="modal"
-                    data-target="#addPengeluaran"
+                    data-target="#addEvent"
                   >
-                    <i class="bi bi-plus-circle-fill"></i> Buat Pengeluaran
+                    <i class="bi bi-plus-circle-fill"></i> Buat Event
                   </button>
                 </div>
                 <div class="col-6"></div>
@@ -50,27 +48,37 @@ const toggleSidebar = () => {
                     <tr>
                       <th scope="col" style="width: 50px">No</th>
                       <th scope="col">Aksi</th>
-                      <th scope="col">Kebutuhan</th>
-                      <th scope="col">Jumlah Pengeluaranr</th>
-                      <th scope="col">Deskripsi Pengeluaran</th>
+                      <th scope="col">Nama Event</th>
+                      <th scope="col">Tanggal Dimulai</th>
+                      <th scope="col">Deskripsi</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(item, index) in pengeluarans" :key="item.id">
+                    <tr v-for="(item, index) in events" :key="item.id">
                       <td>{{ index + 1 }}</td>
                       <td>
                         <div class="row">
-                          <div class="col-6">
+                          <div class="col-4">
+                            <router-link
+                              :to="{
+                                name: 'admin-report',
+                                params: { eventId: item.id },
+                              }"
+                            >
+                              <button>Ke Laporan Event</button>
+                            </router-link>
+                          </div>
+                          <div class="col-4">
                             <button
                               type="button"
                               class="btn btn-warning"
                               data-toggle="modal"
-                              data-target="#editPengeluaran"
+                              data-target="#editTransaksi"
                               @click="
                                 setDataUpdate(
-                                  item.keperluan_pengeluaran,
-                                  item.jumlah_pengeluaran,
-                                  item.deskripsi_pengeluaran,
+                                  item.nama_event,
+                                  item.tanggal_event,
+                                  item.deskripsi_event,
                                   item.id
                                 )
                               "
@@ -78,9 +86,9 @@ const toggleSidebar = () => {
                               <i class="bi bi-pencil-square"></i>
                             </button>
                           </div>
-                          <div class="col-6">
+                          <div class="col-4">
                             <button
-                              @click="konfirmasi(item.id, item.keperluan_pengeluaran)"
+                              @click="konfirmasi(item.id, item.nama_event)"
                               class="btn btn-danger customDetail"
                             >
                               <i class="bi bi-trash3"></i>
@@ -88,9 +96,9 @@ const toggleSidebar = () => {
                           </div>
                         </div>
                       </td>
-                      <td>{{ item.keperluan_pengeluaran }}</td>
-                      <td>{{ item.jumlah_pengeluaran }}</td>
-                      <td>{{ item.deskripsi_pengeluaran }}</td>
+                      <td>{{ item.nama_event }}</td>
+                      <td>{{ item.tanggal_event }}</td>
+                      <td>{{ item.deskripsi_event }}</td>
                     </tr>
                   </tbody>
                 </DataTable>
@@ -113,18 +121,16 @@ const toggleSidebar = () => {
   <!-- modal tambah transaksi -->
   <div
     class="modal fade"
-    id="addPengeluaran"
+    id="addEvent"
     tabindex="-1"
     role="dialog"
-    aria-labelledby="addPengeluaranLabel"
+    aria-labelledby="addEventLabel"
     aria-hidden="true"
   >
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addPengeluaranLabel">
-            Buat Event Baru
-          </h5>
+          <h5 class="modal-title" id="addEventLabel">Buat Event Baru</h5>
           <button
             type="button"
             class="close"
@@ -137,57 +143,41 @@ const toggleSidebar = () => {
         <div class="modal-body">
           <form>
             <div class="mb-3">
-              <label for="ketua" class="form-label">Kebutuhan</label>
+              <label for="ketua" class="form-label">Nama Event</label>
               <input
                 type="text"
                 class="form-control"
                 id="mapel"
-                placeholder="masukkan kebutuhan"
-                v-model="formPengeluaran.keperluan_pengeluaran"
+                placeholder="masukkan nominal pengeluaran"
+                v-model="formEvent.nama_event"
               />
             </div>
             <div class="mb-3">
-              <label for="ketua" class="form-label">Jumlah Pengeluaran</label>
+              <label for="ketua" class="form-label">Tanggal Event</label>
               <input
-                type="text"
+                type="date"
                 class="form-control"
                 id="mapel"
-                placeholder="masukkan jumlah pengeluaran"
-                v-model="formPengeluaran.jumlah_pengeluaran"
+                v-model="formEvent.tanggal_event"
               />
             </div>
 
-             <div class="mb-3">
-              <label for="mission" class="form-label">Events</label>
-              <select class="form-select" v-model="selectedEvent">
-                <option value="" disabled selected>Pilih Event</option>
-                <option
-                  v-for="dataEvent in events"
-                  :key="dataEvent.id"
-                  :value="dataEvent.id"
-                >
-                  {{ dataEvent.nama_event }} - {{dataEvent.tanggal_event}}
-                </option>
-              </select>
-            </div>
-
             <div class="mb-3">
-              <label for="keterangan" class="form-label">Deskripsi</label>
+              <label for="keterangan" class="form-label">Keterangan</label>
               <textarea
                 class="form-control"
                 id="keterangan"
-                placeholder="Masukkan deskripsi"
-                v-model="formPengeluaran.deskripsi_pengeluaran"
+                placeholder="Masukkan keterangan"
+                v-model="formEvent.deskripsi_event"
               ></textarea>
             </div>
-            
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">
             Batal
           </button>
-          <button type="button" class="btn blueButton" @click="createPengeluaran">
+          <button type="button" class="btn blueButton" @click="createEvent">
             Simpan
           </button>
         </div>
@@ -199,16 +189,16 @@ const toggleSidebar = () => {
   <!-- modal edit transaksi -->
   <div
     class="modal fade"
-    id="editPengeluaran"
+    id="editTransaksi"
     tabindex="-1"
     role="dialog"
-    aria-labelledby="editPengeluaranLabel"
+    aria-labelledby="editTransaksiLabel"
     aria-hidden="true"
   >
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="editPengeluaranLabel">Edit Pengeluaran</h5>
+          <h5 class="modal-title" id="editTransaksiLabel">Edit Pengeluaran</h5>
           <button
             type="button"
             class="close"
@@ -221,57 +211,41 @@ const toggleSidebar = () => {
         <div class="modal-body">
           <form>
             <div class="mb-3">
-              <label for="ketua" class="form-label">Kebutuhan</label>
+              <label for="ketua" class="form-label">Nama Event</label>
               <input
                 type="text"
                 class="form-control"
                 id="mapel"
-                placeholder="masukkan kebutuhan"
-                v-model="formUpdatePengeluaran.keperluan_pengeluaran"
+                placeholder="masukkan nominal pengeluaran"
+                v-model="formUpdateEvent.nama_event"
               />
             </div>
             <div class="mb-3">
-              <label for="ketua" class="form-label">Jumlah Pengeluaran</label>
+              <label for="ketua" class="form-label">Tanggal Event</label>
               <input
-                type="text"
+                type="date"
                 class="form-control"
                 id="mapel"
-                placeholder="masukkan jumlah pengeluaran"
-                v-model="formUpdatePengeluaran.jumlah_pengeluaran"
+                v-model="formUpdateEvent.tanggal_event"
               />
             </div>
 
-             <div class="mb-3">
-              <label for="mission" class="form-label">Events</label>
-              <select class="form-select" v-model="selectedEvent">
-                <option value="" disabled selected>Pilih Event</option>
-                <option
-                  v-for="dataEvent in events"
-                  :key="dataEvent.id"
-                  :value="dataEvent.id"
-                >
-                  {{ dataEvent.nama_event }} - {{dataEvent.tanggal_event}}
-                </option>
-              </select>
-            </div>
-
             <div class="mb-3">
-              <label for="keterangan" class="form-label">Deskripsi</label>
+              <label for="keterangan" class="form-label">Keterangan</label>
               <textarea
                 class="form-control"
                 id="keterangan"
-                placeholder="Masukkan deskripsi"
-                v-model="formUpdatePengeluaran.deskripsi_pengeluaran"
+                placeholder="Masukkan keterangan"
+                v-model="formUpdateEvent.deskripsi_event"
               ></textarea>
             </div>
-            
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">
             Batal
           </button>
-          <button type="button" class="btn blueButton" @click="updatePengeluaran">
+          <button type="button" class="btn blueButton" @click="updateEvent">
             Simpan
           </button>
         </div>
@@ -291,41 +265,39 @@ DataTable.use(DataTablesCore);
 export default {
   data() {
     return {
-      pengeluarans: [],
-      events:[],
-      formPengeluaran: {
-        keperluan_pengeluaran: "",
-        jumlah_pengeluaran: "",
-        deskripsi_pengeluaran: "",
+      events: [],
+      formEvent: {
+        nama_event: "",
+        tanggal_event: "",
+        deskripsi_event: "",
       },
-      formUpdatePengeluaran: {
-        keperluan_pengeluaran: "",
-        jumlah_pengeluaran: "",
-        deskripsi_pengeluaran: "",
-        id_pengeluaran:""
+      formUpdateEvent: {
+        nama_event: "",
+        tanggal_event: "",
+        deskripsi_event: "",
+        id_event: "",
       },
       ready: false,
-      selectedEvent:"",
-      user_id:""
+      user_id: "",
     };
   },
   methods: {
-    setDataUpdate(keperluan_pengeluaran, jumlah_pengeluaran, deskripsi_pengeluaran, id) {
-      this.formUpdatePengeluaran.keperluan_pengeluaran = keperluan_pengeluaran;
-      this.formUpdatePengeluaran.jumlah_pengeluaran = jumlah_pengeluaran;
-      this.formUpdatePengeluaran.deskripsi_pengeluaran = deskripsi_pengeluaran;
-      this.formUpdatePengeluaran.id_pengeluaran = id;
+    setDataUpdate(nama_event, tanggal_event, deskripsi_event, id) {
+      this.formUpdateEvent.nama_event = nama_event;
+      this.formUpdateEvent.tanggal_event = tanggal_event;
+      this.formUpdateEvent.deskripsi_event = deskripsi_event;
+      this.formUpdateEvent.id_event = id;
     },
-    createPengeluaran() {
+    createEvent() {
       this.ready = false;
       const formData = new FormData();
-      formData.append("keperluan_pengeluaran", this.formPengeluaran.keperluan_pengeluaran);
-      formData.append("jumlah_pengeluaran", this.formPengeluaran.jumlah_pengeluaran);
-      formData.append("deskripsi_pengeluaran", this.formPengeluaran.deskripsi_pengeluaran);
-      formData.append("id_event", this.selectedEvent);
+      formData.append("nama_event", this.formEvent.nama_event);
+      formData.append("tanggal_event", this.formEvent.tanggal_event);
+      formData.append("deskripsi_event", this.formEvent.deskripsi_event);
+      formData.append("id_user", this.user_id);
 
       axios
-        .post("https://backend.keuanganfpti.com/api/create-pengeluaran", formData, {
+        .post("https://backend.keuanganfpti.com/api/create-event", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -333,37 +305,33 @@ export default {
         })
         .then((response) => {
           console.log(response.data);
-          this.formPengeluaran = {
-            pemberi_sponsor: "",
-            dana_sponsor: "",
-            deskripsi_sponsor: "",
-            selectedEvent: "",
+          this.formEvent = {
+            jumlah_transaksi: "",
+            deskripsi: "",
+            tgl_transaksi: "",
+            selectedPenerima: "",
           };
-          this.showAlert(
-            "Request Success",
-            "Sponsor berhasil buat",
-            "success"
-          );
-          this.fetchDataSponsor();
+          this.showAlert("Request Success", "Event berhasil buat", "success");
+          this.fetchDataEvents();
         })
         .catch((error) => {
-          this.showAlert("Request Failed", "Sponsor gagal buat", "error");
+          this.showAlert("Request Failed", "Event gagal buat", "error");
           console.error(error);
           this.ready = true;
         });
     },
 
-    updatePengeluaran() {
+    updateEvent() {
       this.ready = false;
       const formData = new FormData();
-    formData.append("keperluan_pengeluaran", this.formUpdatePengeluaran.keperluan_pengeluaran);
-      formData.append("jumlah_pengeluaran", this.formUpdatePengeluaran.jumlah_pengeluaran);
-      formData.append("deskripsi_pengeluaran", this.formUpdatePengeluaran.deskripsi_pengeluaran);
-      formData.append("id_event", this.selectedEvent); 
+      formData.append("nama_event", this.formUpdateEvent.nama_event);
+      formData.append("tanggal_event", this.formUpdateEvent.tanggal_event);
+      formData.append("deskripsi_event", this.formUpdateEvent.deskripsi_event);
+      formData.append("id_user", this.user_id);
 
       axios
         .post(
-          `https://backend.keuanganfpti.com/api/update-pengeluaran/${this.formUpdatePengeluaran.id_pengeluaran}`,
+          `https://backend.keuanganfpti.com/api/update-event/${this.formUpdateEvent.id_event}`,
           formData,
           {
             headers: {
@@ -376,27 +344,23 @@ export default {
           console.log(response.data);
           this.showAlert(
             "Request Success",
-            "Sponsor berhasil diupdate",
+            "Event berhasil diupdate",
             "success"
           );
-          this.fetchDataSponsor();
+          this.fetchDataEvents();
         })
         .catch((error) => {
-          this.showAlert(
-            "Request Failed",
-            "Sponsor gagal diupdate",
-            "error"
-          );
+          this.showAlert("Request Failed", "Event gagal diupdate", "error");
           console.error(error);
           this.ready = true;
         });
     },
 
-    deletePengeluaran(id) {
+    deleteEvent(id) {
       this.ready = false;
 
       axios
-        .delete(`https://backend.keuanganfpti.com/api/delete-pengeluaran/${id}`, {
+        .delete(`https://backend.keuanganfpti.com/api/delete-event/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -406,44 +370,22 @@ export default {
           console.log(response.data);
           this.showAlert(
             "Request Success",
-            "Sponsor berhasil dihapus",
+            "Event berhasil dihapus",
             "success"
           );
-          this.fetchDataSponsor();
+          this.fetchDataEvents();
         })
         .catch((error) => {
-          this.showAlert(
-            "Request Failed",
-            "Sponsor gagal dihapus",
-            "error"
-          );
+          this.showAlert("Request Failed", "Event gagal dihapus", "error");
           console.error(error);
           this.ready = true;
         });
     },
 
-    async fetchDataSponsor() {
+    async fetchDataEvents() {
       try {
         const response = await axios.get(
-          `https://backend.keuanganfpti.com/api/list-pengeluaran`,
-          {
-            headers: {
-              Authorization: "Bearer " + sessionStorage.getItem("token"),
-            },
-          }
-        );
-        this.pengeluarans = response.data.data;
-        this.ready = true;
-      } catch (error) {
-        this.ready = true;
-        console.error(error);
-      }
-    },
-
-        async fetchDataActiveEvent() {
-      try {
-        const response = await axios.get(
-          `https://backend.keuanganfpti.com/api/event-active`,
+          `https://backend.keuanganfpti.com/api/list-event`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -451,7 +393,9 @@ export default {
           }
         );
         this.events = response.data.data;
+        this.ready = true;
       } catch (error) {
+        this.ready = true;
         console.error(error);
       }
     },
@@ -462,15 +406,15 @@ export default {
         text: text,
         icon: icon,
       }).then(() => {
-        $("#addPengeluaran").modal("hide");
-        $("#editPengeluaran").modal("hide");
+        $("#addEvent").modal("hide");
+        $("#editTransaksi").modal("hide");
       });
     },
 
-    konfirmasi(id, keperluan_pengeluaran) {
+    konfirmasi(id, nama_event) {
       Swal.fire({
         title: `Konfirmasi Penghapusan`,
-        text: `Apakah Anda yakin ingin menghapus pengeluaran ${keperluan_pengeluaran}?`,
+        text: `Apakah Anda yakin ingin menghapus event ${nama_event}?`,
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#d33",
@@ -479,7 +423,7 @@ export default {
         cancelButtonText: "Batal",
       }).then((result) => {
         if (result.isConfirmed) {
-          this.deletePengeluaran(id);
+          this.deleteEvent(id);
         }
       });
     },
@@ -532,8 +476,7 @@ export default {
           this.$router.push("/");
         }
         // success
-        this.fetchDataSponsor();
-        this.fetchDataActiveEvent();
+        this.fetchDataEvents();
         // akhir
       } catch (error) {
         console.error("Error decoding token:", error);
