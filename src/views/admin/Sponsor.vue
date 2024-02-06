@@ -325,7 +325,7 @@ export default {
       formData.append("id_event", this.selectedEvent);
 
       axios
-        .post("http://localhost:8000/api/create-sponsor", formData, {
+        .post("https://backend.keuanganfpti.com/api/create-sponsor", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -363,7 +363,7 @@ export default {
 
       axios
         .post(
-          `http://localhost:8000/api/update-sponsor/${this.formUpdateSponsor.id_sponsor}`,
+          `https://backend.keuanganfpti.com/api/update-sponsor/${this.formUpdateSponsor.id_sponsor}`,
           formData,
           {
             headers: {
@@ -396,7 +396,7 @@ export default {
       this.ready = false;
 
       axios
-        .delete(`http://localhost:8000/api/delete-sponsor/${id}`, {
+        .delete(`https://backend.keuanganfpti.com/api/delete-sponsor/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -425,7 +425,7 @@ export default {
     async fetchDataSponsor() {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/list-sponsor`,
+          `https://backend.keuanganfpti.com/api/list-sponsor`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -443,7 +443,7 @@ export default {
         async fetchDataActiveEvent() {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/event-active`,
+          `https://backend.keuanganfpti.com/api/event-active`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),

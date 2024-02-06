@@ -377,7 +377,7 @@ export default {
       formData.append("id_event", this.selectedEvent);
 
       axios
-        .post("http://localhost:8000/api/create-hutang", formData, {
+        .post("https://backend.keuanganfpti.com/api/create-hutang", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -419,7 +419,7 @@ export default {
 
       axios
         .post(
-          `http://localhost:8000/api/update-hutang/${this.formUpdateHutang.id_hutang}`,
+          `https://backend.keuanganfpti.com/api/update-hutang/${this.formUpdateHutang.id_hutang}`,
           formData,
           {
             headers: {
@@ -452,7 +452,7 @@ export default {
       this.ready = false;
 
       axios
-        .delete(`http://localhost:8000/api/delete-hutang/${id}`, {
+        .delete(`https://backend.keuanganfpti.com/api/delete-hutang/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -481,7 +481,7 @@ export default {
     async fetchDataHutang() {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/list-hutang`,
+          `https://backend.keuanganfpti.com/api/list-hutang`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -499,7 +499,7 @@ export default {
         async fetchDataActiveEvent() {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/event-active`,
+          `https://backend.keuanganfpti.com/api/event-active`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),

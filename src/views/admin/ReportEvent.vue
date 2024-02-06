@@ -182,7 +182,7 @@ export default {
     },
     fetchEventReport() {
       axios
-        .get(`http://localhost:8000/api/report-event/${this.eventId}`)
+        .get(`https://backend.keuanganfpti.com/api/report-event/${this.eventId}`)
         .then((response) => {
           this.event = response.data.event;
           this.sponsors = response.data.sponsors;

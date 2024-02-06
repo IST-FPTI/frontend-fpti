@@ -25,9 +25,7 @@ const toggleSidebar = () => {
 
         <!-- Begin Page Content -->
         <div class="container-fluid mt-4">
-          <h1 class="h3 mb-0 text-gray-800 text-center mb-5">
-            Data Event
-          </h1>
+          <h1 class="h3 mb-0 text-gray-800 text-center mb-5">Data Event</h1>
           <div class="row">
             <div class="col-1"></div>
             <div class="col-10">
@@ -61,9 +59,14 @@ const toggleSidebar = () => {
                       <td>
                         <div class="row">
                           <div class="col-4">
-                             <router-link :to="{ name: 'admin-report', params: { eventId: item.id } }">
-      <button>Ke Laporan Event</button>
-    </router-link>
+                            <router-link
+                              :to="{
+                                name: 'admin-report',
+                                params: { eventId: item.id },
+                              }"
+                            >
+                              <button>Ke Laporan Event</button>
+                            </router-link>
                           </div>
                           <div class="col-4">
                             <button
@@ -127,9 +130,7 @@ const toggleSidebar = () => {
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addEventLabel">
-            Buat Event Baru
-          </h5>
+          <h5 class="modal-title" id="addEventLabel">Buat Event Baru</h5>
           <button
             type="button"
             class="close"
@@ -208,7 +209,7 @@ const toggleSidebar = () => {
           </button>
         </div>
         <div class="modal-body">
-           <form>
+          <form>
             <div class="mb-3">
               <label for="ketua" class="form-label">Nama Event</label>
               <input
@@ -274,10 +275,10 @@ export default {
         nama_event: "",
         tanggal_event: "",
         deskripsi_event: "",
-        id_event:""
+        id_event: "",
       },
       ready: false,
-      user_id:""
+      user_id: "",
     };
   },
   methods: {
@@ -296,7 +297,7 @@ export default {
       formData.append("id_user", this.user_id);
 
       axios
-        .post("http://localhost:8000/api/create-event", formData, {
+        .post("https://backend.keuanganfpti.com/api/create-event", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -310,11 +311,7 @@ export default {
             tgl_transaksi: "",
             selectedPenerima: "",
           };
-          this.showAlert(
-            "Request Success",
-            "Event berhasil buat",
-            "success"
-          );
+          this.showAlert("Request Success", "Event berhasil buat", "success");
           this.fetchDataEvents();
         })
         .catch((error) => {
@@ -334,7 +331,7 @@ export default {
 
       axios
         .post(
-          `http://localhost:8000/api/update-event/${this.formUpdateEvent.id_event}`,
+          `https://backend.keuanganfpti.com/api/update-event/${this.formUpdateEvent.id_event}`,
           formData,
           {
             headers: {
@@ -353,11 +350,7 @@ export default {
           this.fetchDataEvents();
         })
         .catch((error) => {
-          this.showAlert(
-            "Request Failed",
-            "Event gagal diupdate",
-            "error"
-          );
+          this.showAlert("Request Failed", "Event gagal diupdate", "error");
           console.error(error);
           this.ready = true;
         });
@@ -367,7 +360,7 @@ export default {
       this.ready = false;
 
       axios
-        .delete(`http://localhost:8000/api/delete-event/${id}`, {
+        .delete(`https://backend.keuanganfpti.com/api/delete-event/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -383,11 +376,7 @@ export default {
           this.fetchDataEvents();
         })
         .catch((error) => {
-          this.showAlert(
-            "Request Failed",
-            "Event gagal dihapus",
-            "error"
-          );
+          this.showAlert("Request Failed", "Event gagal dihapus", "error");
           console.error(error);
           this.ready = true;
         });
@@ -396,7 +385,7 @@ export default {
     async fetchDataEvents() {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/list-event`,
+          `https://backend.keuanganfpti.com/api/list-event`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -410,7 +399,6 @@ export default {
         console.error(error);
       }
     },
-
 
     showAlert(title, text, icon) {
       this.$swal({
