@@ -117,7 +117,7 @@ export default {
       }
 
       axios
-        .post(`http://127.0.0.1:8000/api/auth/logout`, null, {
+        .post(`https://backend.keuanganfpti.com/api/auth/logout`, null, {
           headers: {
             Authorization: "Bearer " + token,
           },
