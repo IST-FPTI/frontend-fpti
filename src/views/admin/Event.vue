@@ -60,12 +60,13 @@ const toggleSidebar = () => {
                         <div class="row">
                           <div class="col-4">
                             <router-link
+                             class="btn btn-success"
                               :to="{
                                 name: 'admin-report',
                                 params: { eventId: item.id },
                               }"
                             >
-                              <button>Ke Laporan Event</button>
+                              <button>Report</button>
                             </router-link>
                           </div>
                           <div class="col-4">
