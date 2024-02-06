@@ -123,7 +123,7 @@ export default {
       formData.append("password", this.form.password);
 
       axios
-        .post("https://backend.keuanganfpti.com/api/auth/login", formData)
+        .post("http://localhost:8000/api/auth/login", formData)
         .then((response) => {
           if (this.cheked === true) {
             const login = JSON.stringify(this.form);
@@ -140,7 +140,8 @@ export default {
           if (response.data.level === "1") {
             this.$router.push("/admin-dashboard");
           } else if (response.data.level === "0") {
-            this.$router.push("/user-dashboard");
+            this.$router.push("/admin-dashboard");
+            // this.$router.push("/user-dashboard");
           } else {
             this.$router.push("/unauthorized");
           }

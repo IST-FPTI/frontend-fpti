@@ -26,7 +26,7 @@ const toggleSidebar = () => {
         <!-- Begin Page Content -->
         <div class="container-fluid mt-4">
           <h1 class="h3 mb-0 text-gray-800 text-center mb-5">
-            Data Pengeluaran
+            Data Sponsor
           </h1>
           <div class="row">
             <div class="col-1"></div>
@@ -36,9 +36,9 @@ const toggleSidebar = () => {
                   <button
                     class="btn btn-warning me-2"
                     data-toggle="modal"
-                    data-target="#addPengeluaran"
+                    data-target="#addSponsor"
                   >
-                    <i class="bi bi-plus-circle-fill"></i> Buat Pengeluaran
+                    <i class="bi bi-plus-circle-fill"></i> Buat Sponsor
                   </button>
                 </div>
                 <div class="col-6"></div>
@@ -50,13 +50,13 @@ const toggleSidebar = () => {
                     <tr>
                       <th scope="col" style="width: 50px">No</th>
                       <th scope="col">Aksi</th>
-                      <th scope="col">Kebutuhan</th>
-                      <th scope="col">Jumlah Pengeluaranr</th>
-                      <th scope="col">Deskripsi Pengeluaran</th>
+                      <th scope="col">Pemberi Sponsor</th>
+                      <th scope="col">Dana Sponsor</th>
+                      <th scope="col">Deskripsi Sponsor</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(item, index) in pengeluarans" :key="item.id">
+                    <tr v-for="(item, index) in sponsors" :key="item.id">
                       <td>{{ index + 1 }}</td>
                       <td>
                         <div class="row">
@@ -65,12 +65,12 @@ const toggleSidebar = () => {
                               type="button"
                               class="btn btn-warning"
                               data-toggle="modal"
-                              data-target="#editPengeluaran"
+                              data-target="#editTransaksi"
                               @click="
                                 setDataUpdate(
-                                  item.keperluan_pengeluaran,
-                                  item.jumlah_pengeluaran,
-                                  item.deskripsi_pengeluaran,
+                                  item.pemberi_sponsor,
+                                  item.dana_sponsor,
+                                  item.deskripsi_sponsor,
                                   item.id
                                 )
                               "
@@ -80,7 +80,7 @@ const toggleSidebar = () => {
                           </div>
                           <div class="col-6">
                             <button
-                              @click="konfirmasi(item.id, item.keperluan_pengeluaran)"
+                              @click="konfirmasi(item.id, item.pemberi_sponsor)"
                               class="btn btn-danger customDetail"
                             >
                               <i class="bi bi-trash3"></i>
@@ -88,9 +88,9 @@ const toggleSidebar = () => {
                           </div>
                         </div>
                       </td>
-                      <td>{{ item.keperluan_pengeluaran }}</td>
-                      <td>{{ item.jumlah_pengeluaran }}</td>
-                      <td>{{ item.deskripsi_pengeluaran }}</td>
+                      <td>{{ item.pemberi_sponsor }}</td>
+                      <td>{{ item.dana_sponsor }}</td>
+                      <td>{{ item.deskripsi_sponsor }}</td>
                     </tr>
                   </tbody>
                 </DataTable>
@@ -113,16 +113,16 @@ const toggleSidebar = () => {
   <!-- modal tambah transaksi -->
   <div
     class="modal fade"
-    id="addPengeluaran"
+    id="addSponsor"
     tabindex="-1"
     role="dialog"
-    aria-labelledby="addPengeluaranLabel"
+    aria-labelledby="addSponsorLabel"
     aria-hidden="true"
   >
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addPengeluaranLabel">
+          <h5 class="modal-title" id="addSponsorLabel">
             Buat Event Baru
           </h5>
           <button
@@ -137,23 +137,23 @@ const toggleSidebar = () => {
         <div class="modal-body">
           <form>
             <div class="mb-3">
-              <label for="ketua" class="form-label">Kebutuhan</label>
+              <label for="ketua" class="form-label">Pemberi Sponsor</label>
               <input
                 type="text"
                 class="form-control"
                 id="mapel"
-                placeholder="masukkan kebutuhan"
-                v-model="formPengeluaran.keperluan_pengeluaran"
+                placeholder="masukkan pemberi sponsor"
+                v-model="formSponsor.pemberi_sponsor"
               />
             </div>
             <div class="mb-3">
-              <label for="ketua" class="form-label">Jumlah Pengeluaran</label>
+              <label for="ketua" class="form-label">Dana Sponsor</label>
               <input
                 type="text"
                 class="form-control"
                 id="mapel"
-                placeholder="masukkan jumlah pengeluaran"
-                v-model="formPengeluaran.jumlah_pengeluaran"
+                placeholder="masukkan dana sponsor"
+                v-model="formSponsor.dana_sponsor"
               />
             </div>
 
@@ -177,7 +177,7 @@ const toggleSidebar = () => {
                 class="form-control"
                 id="keterangan"
                 placeholder="Masukkan deskripsi"
-                v-model="formPengeluaran.deskripsi_pengeluaran"
+                v-model="formSponsor.deskripsi_sponsor"
               ></textarea>
             </div>
             
@@ -187,7 +187,7 @@ const toggleSidebar = () => {
           <button type="button" class="btn btn-secondary" data-dismiss="modal">
             Batal
           </button>
-          <button type="button" class="btn blueButton" @click="createPengeluaran">
+          <button type="button" class="btn blueButton" @click="createSponsor">
             Simpan
           </button>
         </div>
@@ -199,16 +199,16 @@ const toggleSidebar = () => {
   <!-- modal edit transaksi -->
   <div
     class="modal fade"
-    id="editPengeluaran"
+    id="editTransaksi"
     tabindex="-1"
     role="dialog"
-    aria-labelledby="editPengeluaranLabel"
+    aria-labelledby="editTransaksiLabel"
     aria-hidden="true"
   >
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="editPengeluaranLabel">Edit Pengeluaran</h5>
+          <h5 class="modal-title" id="editTransaksiLabel">Edit Pengeluaran</h5>
           <button
             type="button"
             class="close"
@@ -219,25 +219,25 @@ const toggleSidebar = () => {
           </button>
         </div>
         <div class="modal-body">
-          <form>
+           <form>
             <div class="mb-3">
-              <label for="ketua" class="form-label">Kebutuhan</label>
+              <label for="ketua" class="form-label">Pemberi Sponsor</label>
               <input
                 type="text"
                 class="form-control"
                 id="mapel"
-                placeholder="masukkan kebutuhan"
-                v-model="formUpdatePengeluaran.keperluan_pengeluaran"
+                placeholder="masukkan pemberi sponsor"
+                v-model="formUpdateSponsor.pemberi_sponsor"
               />
             </div>
             <div class="mb-3">
-              <label for="ketua" class="form-label">Jumlah Pengeluaran</label>
+              <label for="ketua" class="form-label">Dana Sponsor</label>
               <input
                 type="text"
                 class="form-control"
                 id="mapel"
-                placeholder="masukkan jumlah pengeluaran"
-                v-model="formUpdatePengeluaran.jumlah_pengeluaran"
+                placeholder="masukkan dana sponsor"
+                v-model="formUpdateSponsor.dana_sponsor"
               />
             </div>
 
@@ -261,7 +261,7 @@ const toggleSidebar = () => {
                 class="form-control"
                 id="keterangan"
                 placeholder="Masukkan deskripsi"
-                v-model="formUpdatePengeluaran.deskripsi_pengeluaran"
+                v-model="formUpdateSponsor.deskripsi_sponsor"
               ></textarea>
             </div>
             
@@ -271,7 +271,7 @@ const toggleSidebar = () => {
           <button type="button" class="btn btn-secondary" data-dismiss="modal">
             Batal
           </button>
-          <button type="button" class="btn blueButton" @click="updatePengeluaran">
+          <button type="button" class="btn blueButton" @click="updateSponsor">
             Simpan
           </button>
         </div>
@@ -291,18 +291,18 @@ DataTable.use(DataTablesCore);
 export default {
   data() {
     return {
-      pengeluarans: [],
+      sponsors: [],
       events:[],
-      formPengeluaran: {
-        keperluan_pengeluaran: "",
-        jumlah_pengeluaran: "",
-        deskripsi_pengeluaran: "",
+      formSponsor: {
+        pemberi_sponsor: "",
+        dana_sponsor: "",
+        deskripsi_sponsor: "",
       },
-      formUpdatePengeluaran: {
-        keperluan_pengeluaran: "",
-        jumlah_pengeluaran: "",
-        deskripsi_pengeluaran: "",
-        id_pengeluaran:""
+      formUpdateSponsor: {
+        pemberi_sponsor: "",
+        dana_sponsor: "",
+        deskripsi_sponsor: "",
+        id_sponsor:""
       },
       ready: false,
       selectedEvent:"",
@@ -310,22 +310,22 @@ export default {
     };
   },
   methods: {
-    setDataUpdate(keperluan_pengeluaran, jumlah_pengeluaran, deskripsi_pengeluaran, id) {
-      this.formUpdatePengeluaran.keperluan_pengeluaran = keperluan_pengeluaran;
-      this.formUpdatePengeluaran.jumlah_pengeluaran = jumlah_pengeluaran;
-      this.formUpdatePengeluaran.deskripsi_pengeluaran = deskripsi_pengeluaran;
-      this.formUpdatePengeluaran.id_pengeluaran = id;
+    setDataUpdate(pemberi_sponsor, dana_sponsor, deskripsi_sponsor, id) {
+      this.formUpdateSponsor.pemberi_sponsor = pemberi_sponsor;
+      this.formUpdateSponsor.dana_sponsor = dana_sponsor;
+      this.formUpdateSponsor.deskripsi_sponsor = deskripsi_sponsor;
+      this.formUpdateSponsor.id_sponsor = id;
     },
-    createPengeluaran() {
+    createSponsor() {
       this.ready = false;
       const formData = new FormData();
-      formData.append("keperluan_pengeluaran", this.formPengeluaran.keperluan_pengeluaran);
-      formData.append("jumlah_pengeluaran", this.formPengeluaran.jumlah_pengeluaran);
-      formData.append("deskripsi_pengeluaran", this.formPengeluaran.deskripsi_pengeluaran);
+      formData.append("pemberi_sponsor", this.formSponsor.pemberi_sponsor);
+      formData.append("dana_sponsor", this.formSponsor.dana_sponsor);
+      formData.append("deskripsi_sponsor", this.formSponsor.deskripsi_sponsor);
       formData.append("id_event", this.selectedEvent);
 
       axios
-        .post("http://localhost:8000/api/create-pengeluaran", formData, {
+        .post("http://localhost:8000/api/create-sponsor", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -333,7 +333,7 @@ export default {
         })
         .then((response) => {
           console.log(response.data);
-          this.formPengeluaran = {
+          this.formSponsor = {
             pemberi_sponsor: "",
             dana_sponsor: "",
             deskripsi_sponsor: "",
@@ -353,17 +353,17 @@ export default {
         });
     },
 
-    updatePengeluaran() {
+    updateSponsor() {
       this.ready = false;
       const formData = new FormData();
-    formData.append("keperluan_pengeluaran", this.formUpdatePengeluaran.keperluan_pengeluaran);
-      formData.append("jumlah_pengeluaran", this.formUpdatePengeluaran.jumlah_pengeluaran);
-      formData.append("deskripsi_pengeluaran", this.formUpdatePengeluaran.deskripsi_pengeluaran);
-      formData.append("id_event", this.selectedEvent); 
+      formData.append("pemberi_sponsor", this.formUpdateSponsor.pemberi_sponsor);
+      formData.append("dana_sponsor", this.formUpdateSponsor.dana_sponsor);
+      formData.append("deskripsi_sponsor", this.formUpdateSponsor.deskripsi_sponsor);
+      formData.append("id_event", this.selectedEvent);
 
       axios
         .post(
-          `http://localhost:8000/api/update-pengeluaran/${this.formUpdatePengeluaran.id_pengeluaran}`,
+          `http://localhost:8000/api/update-sponsor/${this.formUpdateSponsor.id_sponsor}`,
           formData,
           {
             headers: {
@@ -392,11 +392,11 @@ export default {
         });
     },
 
-    deletePengeluaran(id) {
+    deleteSponsor(id) {
       this.ready = false;
 
       axios
-        .delete(`http://localhost:8000/api/delete-pengeluaran/${id}`, {
+        .delete(`http://localhost:8000/api/delete-sponsor/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -425,14 +425,14 @@ export default {
     async fetchDataSponsor() {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/list-pengeluaran`,
+          `http://localhost:8000/api/list-sponsor`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
             },
           }
         );
-        this.pengeluarans = response.data.data;
+        this.sponsors = response.data.data;
         this.ready = true;
       } catch (error) {
         this.ready = true;
@@ -462,15 +462,15 @@ export default {
         text: text,
         icon: icon,
       }).then(() => {
-        $("#addPengeluaran").modal("hide");
-        $("#editPengeluaran").modal("hide");
+        $("#addSponsor").modal("hide");
+        $("#editTransaksi").modal("hide");
       });
     },
 
-    konfirmasi(id, keperluan_pengeluaran) {
+    konfirmasi(id, pemberi_sponsor) {
       Swal.fire({
         title: `Konfirmasi Penghapusan`,
-        text: `Apakah Anda yakin ingin menghapus pengeluaran ${keperluan_pengeluaran}?`,
+        text: `Apakah Anda yakin ingin menghapus sponsor dari ${pemberi_sponsor}?`,
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#d33",
@@ -479,7 +479,7 @@ export default {
         cancelButtonText: "Batal",
       }).then((result) => {
         if (result.isConfirmed) {
-          this.deletePengeluaran(id);
+          this.deleteSponsor(id);
         }
       });
     },

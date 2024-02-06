@@ -14,14 +14,14 @@ const router = createRouter({
       component: () => import('../views/admin/Dashboard.vue')
     },
     {
-      path: '/admin-pemasukan',
-      name: 'admin-pemasukan',
-      component: () => import('../views/admin/Pemasukan.vue')
+      path: '/admin-event',
+      name: 'admin-event',
+      component: () => import('../views/admin/Event.vue')
     },
     {
-      path: '/admin-pemasukan-external',
-      name: 'admin-pemasukan-external',
-      component: () => import('../views/admin/PemasukanEksternal.vue')
+      path: '/admin-sponsor',
+      name: 'admin-sponsor',
+      component: () => import('../views/admin/Sponsor.vue')
     },
     {
       path: '/admin-pengeluaran',
@@ -34,53 +34,20 @@ const router = createRouter({
       component: () => import('../views/admin/Hutang.vue')
     },
     {
-      path: '/admin-audit',
-      name: 'admin-audit',
-      component: () => import('../views/admin/Audit.vue')
+      path: '/admin-piutang',
+      name: 'admin-piutang',
+      component: () => import('../views/admin/Piutang.vue')
     },
     {
-      path: '/admin-jurnal',
-      name: 'admin-jurnal',
-      component: () => import('../views/admin/Jurnal.vue')
-    },
-    {
-      path: '/admin-ledger',
-      name: 'admin-ledger',
-      component: () => import('../views/admin/BukuBesar.vue')
-    },
-    {
-      path: '/admin-realisasi-anggaran',
-      name: 'admin-realisasi-anggaran',
-      component: () => import('../views/admin/RealisasiAnggaran.vue')
-    },
-    {
-      path: '/admin-pengguna',
-      name: 'admin-pengguna',
-      component: () => import('../views/admin/User.vue')
-    },
-    {
-      path: '/admin-profile',
-      name: 'admin-profile',
-      component: () => import('../views/admin/Profile.vue')
+      path: '/admin-report/:eventId',
+      name: 'admin-report',
+      props: true,
+      component: () => import('../views/admin/ReportEvent.vue')
     },
 
+
     
-    // user
-    {
-      path: '/user-dashboard',
-      name: 'user-dashboard',
-      component: () => import('../views/user/Dashboard.vue')
-    },
-    {
-      path: '/user-jurnal',
-      name: 'user-jurnal',
-      component: () => import('../views/user/Jurnal.vue')
-    },
-    {
-      path: '/user-ledger',
-      name: 'user-ledger',
-      component: () => import('../views/user/BukuBesar.vue')
-    },
+    
 
   ]
 })

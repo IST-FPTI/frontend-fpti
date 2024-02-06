@@ -26,7 +26,7 @@ const toggleSidebar = () => {
         <!-- Begin Page Content -->
         <div class="container-fluid mt-4">
           <h1 class="h3 mb-0 text-gray-800 text-center mb-5">
-            Data Pengeluaran
+            Data Piutang
           </h1>
           <div class="row">
             <div class="col-1"></div>
@@ -36,9 +36,9 @@ const toggleSidebar = () => {
                   <button
                     class="btn btn-warning me-2"
                     data-toggle="modal"
-                    data-target="#addPengeluaran"
+                    data-target="#addPiutang"
                   >
-                    <i class="bi bi-plus-circle-fill"></i> Buat Pengeluaran
+                    <i class="bi bi-plus-circle-fill"></i> Buat Piutang
                   </button>
                 </div>
                 <div class="col-6"></div>
@@ -50,13 +50,15 @@ const toggleSidebar = () => {
                     <tr>
                       <th scope="col" style="width: 50px">No</th>
                       <th scope="col">Aksi</th>
-                      <th scope="col">Kebutuhan</th>
-                      <th scope="col">Jumlah Pengeluaranr</th>
-                      <th scope="col">Deskripsi Pengeluaran</th>
+                      <th scope="col">Peminjam</th>
+                      <th scope="col">No Hp</th>
+                      <th scope="col">Jumlah Pinjaman</th>
+                      <th scope="col">Deskripsi Pinjaman</th>
+                      <th scope="col">Status</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(item, index) in pengeluarans" :key="item.id">
+                    <tr v-for="(item, index) in piutangs" :key="item.id">
                       <td>{{ index + 1 }}</td>
                       <td>
                         <div class="row">
@@ -65,12 +67,13 @@ const toggleSidebar = () => {
                               type="button"
                               class="btn btn-warning"
                               data-toggle="modal"
-                              data-target="#editPengeluaran"
+                              data-target="#aditPiutang"
                               @click="
                                 setDataUpdate(
-                                  item.keperluan_pengeluaran,
-                                  item.jumlah_pengeluaran,
-                                  item.deskripsi_pengeluaran,
+                                  item.pihak_peminjam,
+                                  item.no_hp,
+                                  item.jumlah_pinjaman,
+                                  item.deskripsi_pinjaman,
                                   item.id
                                 )
                               "
@@ -80,7 +83,7 @@ const toggleSidebar = () => {
                           </div>
                           <div class="col-6">
                             <button
-                              @click="konfirmasi(item.id, item.keperluan_pengeluaran)"
+                              @click="konfirmasi(item.id, item.pihak_peminjam)"
                               class="btn btn-danger customDetail"
                             >
                               <i class="bi bi-trash3"></i>
@@ -88,9 +91,11 @@ const toggleSidebar = () => {
                           </div>
                         </div>
                       </td>
-                      <td>{{ item.keperluan_pengeluaran }}</td>
-                      <td>{{ item.jumlah_pengeluaran }}</td>
-                      <td>{{ item.deskripsi_pengeluaran }}</td>
+                      <td>{{ item.pihak_peminjam }}</td>
+                      <td>{{ item.no_hp }}</td>
+                      <td>{{ item.jumlah_pinjaman }}</td>
+                      <td>{{ item.deskripsi_pinjaman }}</td>
+                      <td>{{ item.status }}</td>
                     </tr>
                   </tbody>
                 </DataTable>
@@ -113,17 +118,17 @@ const toggleSidebar = () => {
   <!-- modal tambah transaksi -->
   <div
     class="modal fade"
-    id="addPengeluaran"
+    id="addPiutang"
     tabindex="-1"
     role="dialog"
-    aria-labelledby="addPengeluaranLabel"
+    aria-labelledby="addPiutangLabel"
     aria-hidden="true"
   >
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addPengeluaranLabel">
-            Buat Event Baru
+          <h5 class="modal-title" id="addPiutangLabel">
+            Buat Piutang
           </h5>
           <button
             type="button"
@@ -137,23 +142,33 @@ const toggleSidebar = () => {
         <div class="modal-body">
           <form>
             <div class="mb-3">
-              <label for="ketua" class="form-label">Kebutuhan</label>
+              <label for="ketua" class="form-label">Peminjam</label>
               <input
                 type="text"
                 class="form-control"
-                id="mapel"
-                placeholder="masukkan kebutuhan"
-                v-model="formPengeluaran.keperluan_pengeluaran"
+                id="piJam"
+                placeholder="masukkan pihak peminjam"
+                v-model="formPiutang.pihak_peminjam"
               />
             </div>
             <div class="mb-3">
-              <label for="ketua" class="form-label">Jumlah Pengeluaran</label>
+              <label for="ketua" class="form-label">Nomor HP</label>
               <input
-                type="text"
+                type="number"
                 class="form-control"
-                id="mapel"
-                placeholder="masukkan jumlah pengeluaran"
-                v-model="formPengeluaran.jumlah_pengeluaran"
+                id="noHp"
+                placeholder="masukkan nomor hp"
+                v-model="formPiutang.no_hp"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="ketua" class="form-label">Jumlah Pinjaman</label>
+              <input
+                type="number"
+                class="form-control"
+                id="jumpin"
+                placeholder="masukkan jumlah pinjaman"
+                v-model="formPiutang.jumlah_pinjaman"
               />
             </div>
 
@@ -172,12 +187,12 @@ const toggleSidebar = () => {
             </div>
 
             <div class="mb-3">
-              <label for="keterangan" class="form-label">Deskripsi</label>
+              <label for="keterangan" class="form-label">Deskripsi Pinjaman</label>
               <textarea
                 class="form-control"
                 id="keterangan"
                 placeholder="Masukkan deskripsi"
-                v-model="formPengeluaran.deskripsi_pengeluaran"
+                v-model="formPiutang.deskripsi_pinjaman"
               ></textarea>
             </div>
             
@@ -187,7 +202,7 @@ const toggleSidebar = () => {
           <button type="button" class="btn btn-secondary" data-dismiss="modal">
             Batal
           </button>
-          <button type="button" class="btn blueButton" @click="createPengeluaran">
+          <button type="button" class="btn blueButton" @click="createPiutang">
             Simpan
           </button>
         </div>
@@ -199,16 +214,16 @@ const toggleSidebar = () => {
   <!-- modal edit transaksi -->
   <div
     class="modal fade"
-    id="editPengeluaran"
+    id="aditPiutang"
     tabindex="-1"
     role="dialog"
-    aria-labelledby="editPengeluaranLabel"
+    aria-labelledby="aditPiutangLabel"
     aria-hidden="true"
   >
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="editPengeluaranLabel">Edit Pengeluaran</h5>
+          <h5 class="modal-title" id="aditPiutangLabel">Edit Hutang</h5>
           <button
             type="button"
             class="close"
@@ -219,25 +234,35 @@ const toggleSidebar = () => {
           </button>
         </div>
         <div class="modal-body">
-          <form>
+            <form>
             <div class="mb-3">
-              <label for="ketua" class="form-label">Kebutuhan</label>
+              <label for="ketua" class="form-label">Peminjam</label>
               <input
                 type="text"
                 class="form-control"
-                id="mapel"
-                placeholder="masukkan kebutuhan"
-                v-model="formUpdatePengeluaran.keperluan_pengeluaran"
+                id="piJam"
+                placeholder="masukkan pihak peminjam"
+                v-model="formUpdatePiutang.pihak_peminjam"
               />
             </div>
             <div class="mb-3">
-              <label for="ketua" class="form-label">Jumlah Pengeluaran</label>
+              <label for="ketua" class="form-label">Nomor HP</label>
               <input
-                type="text"
+                type="number"
                 class="form-control"
-                id="mapel"
-                placeholder="masukkan jumlah pengeluaran"
-                v-model="formUpdatePengeluaran.jumlah_pengeluaran"
+                id="noHp"
+                placeholder="masukkan nomor hp"
+                v-model="formUpdatePiutang.no_hp"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="ketua" class="form-label">Jumlah Pinjaman</label>
+              <input
+                type="number"
+                class="form-control"
+                id="jumpin"
+                placeholder="masukkan jumlah pinjaman"
+                v-model="formUpdatePiutang.jumlah_pinjaman"
               />
             </div>
 
@@ -256,12 +281,12 @@ const toggleSidebar = () => {
             </div>
 
             <div class="mb-3">
-              <label for="keterangan" class="form-label">Deskripsi</label>
+              <label for="keterangan" class="form-label">Deskripsi Pinjaman</label>
               <textarea
                 class="form-control"
                 id="keterangan"
                 placeholder="Masukkan deskripsi"
-                v-model="formUpdatePengeluaran.deskripsi_pengeluaran"
+                v-model="formUpdatePiutang.deskripsi_pinjaman"
               ></textarea>
             </div>
             
@@ -271,7 +296,7 @@ const toggleSidebar = () => {
           <button type="button" class="btn btn-secondary" data-dismiss="modal">
             Batal
           </button>
-          <button type="button" class="btn blueButton" @click="updatePengeluaran">
+          <button type="button" class="btn blueButton" @click="updatePiutang">
             Simpan
           </button>
         </div>
@@ -291,18 +316,20 @@ DataTable.use(DataTablesCore);
 export default {
   data() {
     return {
-      pengeluarans: [],
+      piutangs: [],
       events:[],
-      formPengeluaran: {
-        keperluan_pengeluaran: "",
-        jumlah_pengeluaran: "",
-        deskripsi_pengeluaran: "",
+      formPiutang: {
+        pihak_peminjam: "",
+        no_hp: "",
+        jumlah_pinjaman: "",
+        deskripsi_pinjaman:"",
       },
-      formUpdatePengeluaran: {
-        keperluan_pengeluaran: "",
-        jumlah_pengeluaran: "",
-        deskripsi_pengeluaran: "",
-        id_pengeluaran:""
+      formUpdatePiutang: {
+        pihak_peminjam: "",
+        no_hp: "",
+        jumlah_pinjaman: "",
+        deskripsi_pinjaman:"",
+        id_piutang:""
       },
       ready: false,
       selectedEvent:"",
@@ -310,22 +337,24 @@ export default {
     };
   },
   methods: {
-    setDataUpdate(keperluan_pengeluaran, jumlah_pengeluaran, deskripsi_pengeluaran, id) {
-      this.formUpdatePengeluaran.keperluan_pengeluaran = keperluan_pengeluaran;
-      this.formUpdatePengeluaran.jumlah_pengeluaran = jumlah_pengeluaran;
-      this.formUpdatePengeluaran.deskripsi_pengeluaran = deskripsi_pengeluaran;
-      this.formUpdatePengeluaran.id_pengeluaran = id;
+    setDataUpdate(pihak_peminjam, no_hp, jumlah_pinjaman,deskripsi_pinjaman, id) {
+      this.formUpdatePiutang.pihak_peminjam = pihak_peminjam;
+      this.formUpdatePiutang.no_hp = no_hp;
+      this.formUpdatePiutang.jumlah_pinjaman = jumlah_pinjaman;
+      this.formUpdatePiutang.deskripsi_pinjaman = deskripsi_pinjaman;
+      this.formUpdatePiutang.id_piutang = id;
     },
-    createPengeluaran() {
+    createPiutang() {
       this.ready = false;
       const formData = new FormData();
-      formData.append("keperluan_pengeluaran", this.formPengeluaran.keperluan_pengeluaran);
-      formData.append("jumlah_pengeluaran", this.formPengeluaran.jumlah_pengeluaran);
-      formData.append("deskripsi_pengeluaran", this.formPengeluaran.deskripsi_pengeluaran);
+      formData.append("pihak_peminjam", this.formPiutang.pihak_peminjam);
+      formData.append("no_hp", this.formPiutang.no_hp);
+      formData.append("jumlah_pinjaman", this.formPiutang.jumlah_pinjaman);
+      formData.append("deskripsi_pinjaman", this.formPiutang.deskripsi_pinjaman);
       formData.append("id_event", this.selectedEvent);
 
       axios
-        .post("http://localhost:8000/api/create-pengeluaran", formData, {
+        .post("http://localhost:8000/api/create-piutang", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -333,37 +362,41 @@ export default {
         })
         .then((response) => {
           console.log(response.data);
-          this.formPengeluaran = {
-            pemberi_sponsor: "",
-            dana_sponsor: "",
-            deskripsi_sponsor: "",
+          this.formPiutang = {
+            keperluan_hutang: "",
+            jumlah_hutang: "",
+            tanggal_hutang: "",
+            tanggal_jatuh_tempo: "",
+            deskripsi_hutang: "",
             selectedEvent: "",
           };
           this.showAlert(
             "Request Success",
-            "Sponsor berhasil buat",
+            "Piutang berhasil buat",
             "success"
           );
-          this.fetchDataSponsor();
+          this.fetchDataPiutang();
         })
         .catch((error) => {
-          this.showAlert("Request Failed", "Sponsor gagal buat", "error");
+          this.showAlert("Request Failed", "Piutang gagal buat", "error");
           console.error(error);
           this.ready = true;
         });
     },
 
-    updatePengeluaran() {
+    updatePiutang() {
       this.ready = false;
       const formData = new FormData();
-    formData.append("keperluan_pengeluaran", this.formUpdatePengeluaran.keperluan_pengeluaran);
-      formData.append("jumlah_pengeluaran", this.formUpdatePengeluaran.jumlah_pengeluaran);
-      formData.append("deskripsi_pengeluaran", this.formUpdatePengeluaran.deskripsi_pengeluaran);
-      formData.append("id_event", this.selectedEvent); 
+            formData.append("pihak_peminjam", this.formUpdatePiutang.pihak_peminjam);
+      formData.append("no_hp", this.formUpdatePiutang.no_hp);
+      formData.append("jumlah_pinjaman", this.formUpdatePiutang.jumlah_pinjaman);
+      formData.append("deskripsi_pinjaman", this.formUpdatePiutang.deskripsi_pinjaman);
+      formData.append("id_event", this.selectedEvent);
+
 
       axios
         .post(
-          `http://localhost:8000/api/update-pengeluaran/${this.formUpdatePengeluaran.id_pengeluaran}`,
+          `http://localhost:8000/api/update-piutang/${this.formUpdatePiutang.id_piutang}`,
           formData,
           {
             headers: {
@@ -376,15 +409,15 @@ export default {
           console.log(response.data);
           this.showAlert(
             "Request Success",
-            "Sponsor berhasil diupdate",
+            "Piutang berhasil diupdate",
             "success"
           );
-          this.fetchDataSponsor();
+          this.fetchDataPiutang();
         })
         .catch((error) => {
           this.showAlert(
             "Request Failed",
-            "Sponsor gagal diupdate",
+            "Piutang gagal diupdate",
             "error"
           );
           console.error(error);
@@ -392,11 +425,11 @@ export default {
         });
     },
 
-    deletePengeluaran(id) {
+    deletePiutang(id) {
       this.ready = false;
 
       axios
-        .delete(`http://localhost:8000/api/delete-pengeluaran/${id}`, {
+        .delete(`http://localhost:8000/api/delete-piutang/${id}`, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: "Bearer " + sessionStorage.getItem("token"),
@@ -406,15 +439,15 @@ export default {
           console.log(response.data);
           this.showAlert(
             "Request Success",
-            "Sponsor berhasil dihapus",
+            "Piutang berhasil dihapus",
             "success"
           );
-          this.fetchDataSponsor();
+          this.fetchDataPiutang();
         })
         .catch((error) => {
           this.showAlert(
             "Request Failed",
-            "Sponsor gagal dihapus",
+            "Piutang gagal dihapus",
             "error"
           );
           console.error(error);
@@ -422,17 +455,17 @@ export default {
         });
     },
 
-    async fetchDataSponsor() {
+    async fetchDataPiutang() {
       try {
         const response = await axios.get(
-          `http://localhost:8000/api/list-pengeluaran`,
+          `http://localhost:8000/api/list-piutang`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
             },
           }
         );
-        this.pengeluarans = response.data.data;
+        this.piutangs = response.data.data;
         this.ready = true;
       } catch (error) {
         this.ready = true;
@@ -462,15 +495,15 @@ export default {
         text: text,
         icon: icon,
       }).then(() => {
-        $("#addPengeluaran").modal("hide");
-        $("#editPengeluaran").modal("hide");
+        $("#addPiutang").modal("hide");
+        $("#aditPiutang").modal("hide");
       });
     },
 
-    konfirmasi(id, keperluan_pengeluaran) {
+    konfirmasi(id, pihak_peminjam) {
       Swal.fire({
         title: `Konfirmasi Penghapusan`,
-        text: `Apakah Anda yakin ingin menghapus pengeluaran ${keperluan_pengeluaran}?`,
+        text: `Apakah Anda yakin ingin menghapus piutang ${pihak_peminjam}?`,
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#d33",
@@ -479,7 +512,7 @@ export default {
         cancelButtonText: "Batal",
       }).then((result) => {
         if (result.isConfirmed) {
-          this.deletePengeluaran(id);
+          this.deletePiutang(id);
         }
       });
     },
@@ -532,7 +565,7 @@ export default {
           this.$router.push("/");
         }
         // success
-        this.fetchDataSponsor();
+        this.fetchDataPiutang();
         this.fetchDataActiveEvent();
         // akhir
       } catch (error) {
