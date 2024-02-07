@@ -97,6 +97,7 @@
                 <th>Keperluan Hutang</th>
                 <th>Jumlah Hutang</th>
                 <th>Deskripsi Hutang</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>
@@ -104,6 +105,16 @@
                 <td>{{ hutang.keperluan_hutang }}</td>
                 <td>{{ hutang.jumlah_hutang }}</td>
                 <td>{{ hutang.deskripsi_hutang }}</td>
+                <td>
+                        <i
+                          v-if="hutang.status == '0'"
+                          class="bi bi-hourglass-split fs-5 text-danger"
+                        ></i>
+                        <i
+                          v-if="hutang.status == '1'"
+                          class="bi bi-check-circle-fill fs-5 text-success"
+                        ></i>
+                      </td>
               </tr>
             </tbody>
           </table>
