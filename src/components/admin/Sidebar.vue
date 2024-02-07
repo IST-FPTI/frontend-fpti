@@ -1,7 +1,7 @@
 <template>
   <!-- Sidebar -->
   <ul
-    class="navbar-nav bg-gradient-light sidebar sidebar-dark accordion"
+    class="navbar-nav bg-light sidebar sidebar-dark accordion"
     id="accordionSidebar"
     :class="{ toggled: sidebarToggled }"
   >
