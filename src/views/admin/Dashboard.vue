@@ -179,7 +179,7 @@ export default {
           }
         );
         (this.jumlah_pemasukan = response.data.total_pemasukan),
-          (this.jumlah_pengeluaran = response.data.totalPengeluaran),
+          (this.jumlah_pengeluaran = response.data.total_pengeluaran),
           (this.hutang_lunas = response.data.hutang_sudah_dibayar),
           (this.hutang_belum_lunas = response.data.hutang_belum_dibayar),
           (this.piutang_lunas = response.data.piutang_sudah_dibayar),
