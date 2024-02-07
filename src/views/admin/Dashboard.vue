@@ -35,9 +35,9 @@ const toggleSidebar = () => {
             </div>
             <div class="col-sm-3">
               <Card
-                color="success"
+                color="primary"
                 header="Pemasukan"
-                :value="formatCurrency(totalPenerimaan)"
+                :value="formatCurrency(jumlah_pemasukan)"
                 icon="fa-calendar"
               />
             </div>
@@ -45,64 +45,97 @@ const toggleSidebar = () => {
               <Card
                 color="danger"
                 header="Pengeluaran"
-                :value="formatCurrency(totalPengiriman)"
+                :value="formatCurrency(jumlah_pengeluaran)"
                 icon="fa-calendar"
               />
             </div>
           </div>
 
           <div class="row mt-4">
+            
+
             <div class="col-xl-3 col-md-6 mb-4">
               <Card
-                color="warning"
-                header="Saldo"
-                :value="formatCurrency(saldoSaatIni)"
+                color="primary"
+                header="Hutang Lunas"
+                :value="formatCurrency(hutang_lunas)"
+                icon="fa-clipboard-list"
+              />
+            </div>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+              <Card
+                color="danger"
+                header="Hutang Belum Lunas"
+                :value="formatCurrency(hutang_belum_lunas)"
+                icon="fa-clipboard-list"
+              />
+            </div>
+
+             <div class="col-xl-3 col-md-6 mb-4">
+              <Card
+                color="success"
+                header="Piutang Lunas"
+                :value="formatCurrency(piutang_lunas)"
                 icon="fa-calendar"
               />
             </div>
 
             <div class="col-xl-3 col-md-6 mb-4">
               <Card
-                color="primary"
-                header="Lunas"
-                :value="formatCurrency(hutangSudahDibayar)"
+                color="warning"
+                header="Piutang Belum Lunas"
+                :value="formatCurrency(piutang_belum_lunas)"
+                icon="fa-clipboard-list"
+              />
+            </div>
+
+           
+
+          </div>
+          <div class="row mt-4">
+            
+
+            <div class="col-xl-3 col-md-6 mb-4">
+              <Card
+                color="success"
+                header="Sisa Saldo"
+                :value="formatCurrency(saldo)"
                 icon="fa-clipboard-list"
               />
             </div>
 
             <div class="col-xl-3 col-md-6 mb-4">
               <Card
-                color="info"
-                header="Hutang"
-                :value="formatCurrency(hutangBelumDibayar)"
+                color="primary"
+                header="Event Selesai"
+                :value="event_selesai"
                 icon="fa-clipboard-list"
               />
             </div>
 
-            <!-- petugas -->
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div
-                        class="text-xs font-weight-bold text-warning text-uppercase mb-1"
-                      >
-                        Akun
-                      </div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">
-                        4
-                      </div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-solid fa-users fa-2x text-gray-300"></i>
-                      <!-- <i class="fas fa-comments fa-2x text-gray-300"></i> -->
-                    </div>
-                  </div>
-                </div>
-              </div>
+             <div class="col-xl-3 col-md-6 mb-4">
+              <Card
+                color="warning"
+                header="Event Belum Selesai"
+                :value="event_belum_selesai"
+                icon="fa-calendar"
+              />
             </div>
+
+            <!-- <div class="col-xl-3 col-md-6 mb-4">
+              <Card
+                color="warning"
+                header="Piutang Belum Lunas"
+                :value="formatCurrency(piutang_belum_lunas)"
+                icon="fa-clipboard-list"
+              />
+            </div> -->
+
+           
+
           </div>
+
         </div>
         <!-- /.container-fluid -->
       </div>
@@ -120,11 +153,15 @@ import axios from "axios";
 export default {
   data() {
     return {
-      hutangBelumDibayar: 0,
-      hutangSudahDibayar: 0,
-      saldoSaatIni: 0,
-      totalPenerimaan: 0,
-      totalPengiriman: 0,
+      jumlah_pengeluaran:0,
+      jumlah_pemasukan:0,
+      hutang_lunas:0,
+      hutang_belum_lunas:0,
+      piutang_lunas:0,
+      piutang_belum_lunas:0,
+      saldo:0,
+      event_selesai:0,
+      event_belum_selesai:0,
       ready: false,
       user_id:""
     };
@@ -133,19 +170,34 @@ export default {
     async fetchDataReport() {
       try {
         const response = await axios.get(
-          `https://backend.keuanganfpti.com/api/report-keuangan/${this.user_id}`,
+          // `http://127.0.0.1:8000/api/darsboard-data`,
+          `https://backend.keuanganfpti.com/api/darsboard-data`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
             },
           }
         );
-        (this.hutangBelumDibayar = response.data.hutangBelumDibayar),
-          (this.hutangSudahDibayar = response.data.hutangSudahDibayar),
-          (this.saldoSaatIni = response.data.saldoSaatIni),
-          (this.totalPenerimaan = response.data.totalPenerimaan),
-          (this.totalPengiriman = response.data.totalPengiriman),
+        (this.jumlah_pemasukan = response.data.total_pemasukan),
+          (this.jumlah_pengeluaran = response.data.totalPengeluaran),
+          (this.hutang_lunas = response.data.hutang_sudah_dibayar),
+          (this.hutang_belum_lunas = response.data.hutang_belum_dibayar),
+          (this.piutang_lunas = response.data.piutang_sudah_dibayar),
+          (this.piutang_belum_lunas = response.data.piutang_belum_dibayar),
+          (this.saldo = response.data.saldo),
+          (this.event_selesai = response.data.event_selesai),
+          (this.event_belum_selesai = response.data.event_belum_selesai),
           (this.ready = true);
+
+          //  'saldo' => $saldo,
+            // 'hutang_belum_dibayar' => $hutangBelumDibayar,
+            // 'hutang_sudah_dibayar' => $hutangSudahDibayar,
+            // 'piutang_belum_dibayar' => $piutangBelumDibayar,
+            // 'piutang_sudah_dibayar' => $piutangSudahDibayar,
+            // 'event_selesai' => $eventSelesai,
+            // 'event_belum_selesai' => $eventBelumSelesai,
+            // 'total_pengeluaran' => $totalPengeluaran,
+            // 'total_pemasukan' => $totalPemasukan,
       } catch (error) {
         console.error(error);
       }
@@ -199,7 +251,7 @@ export default {
           this.$router.push("/");
         }
         // success
-        // this.fetchDataReport();
+        this.fetchDataReport();
         // akhir
       } catch (error) {
         console.error("Error decoding token:", error);

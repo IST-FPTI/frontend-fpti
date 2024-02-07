@@ -66,7 +66,7 @@ const toggleSidebar = () => {
                                 params: { eventId: item.id },
                               }"
                             >
-                              <button>Report</button>
+                            <i class="bi bi-file-earmark-pdf-fill"></i>
                             </router-link>
                           </div>
                           <div class="col-4">

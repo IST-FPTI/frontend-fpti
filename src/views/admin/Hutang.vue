@@ -63,7 +63,18 @@ const toggleSidebar = () => {
                       <td>{{ index + 1 }}</td>
                       <td>
                         <div class="row">
-                          <div class="col-6">
+                          <div class="col-4">
+                            <button
+                              type="button"
+                              class="btn btn-success"
+                              @click="
+                                konfirmasiBayar(item.id, item.keperluan_hutang)
+                              "
+                            >
+                              <i class="bi bi-cash-coin"></i>
+                            </button>
+                          </div>
+                          <div class="col-4">
                             <button
                               type="button"
                               class="btn btn-warning"
@@ -83,7 +94,7 @@ const toggleSidebar = () => {
                               <i class="bi bi-pencil-square"></i>
                             </button>
                           </div>
-                          <div class="col-6">
+                          <div class="col-4">
                             <button
                               @click="konfirmasi(item.id, item.keperluan_hutang)"
                               class="btn btn-danger customDetail"
@@ -98,7 +109,16 @@ const toggleSidebar = () => {
                       <td>{{ item.deskripsi_hutang }}</td>
                       <td>{{ item.tanggal_hutang }}</td>
                       <td>{{ item.tanggal_jatuh_tempo }}</td>
-                      <td>{{ item.status }}</td>
+                      <td>
+                        <i
+                          v-if="item.status == '0'"
+                          class="bi bi-hourglass-split fs-5 text-danger"
+                        ></i>
+                        <i
+                          v-if="item.status == '1'"
+                          class="bi bi-check-circle-fill fs-5 text-success"
+                        ></i>
+                      </td>
                     </tr>
                   </tbody>
                 </DataTable>
@@ -512,6 +532,32 @@ export default {
       }
     },
 
+        async bayarHutang(id) {
+      try {
+        const response = await axios.post(
+          `https://backend.keuanganfpti.com/api/bayar-hutang/${id}`,
+          {
+            headers: {
+              Authorization: "Bearer " + sessionStorage.getItem("token"),
+            },
+          }
+        );
+        this.showAlert(
+          "Request Success",
+          "Hutang berhasil dibayarkan",
+          "success"
+        );
+        this.ready = true;
+      } catch (error) {
+        console.error(error);
+        this.showAlert(
+          "Request Failed",
+          "Gagal membayar hutang, pastikan saldo anda cukup",
+          "error"
+        );
+      }
+    },
+
     showAlert(title, text, icon) {
       this.$swal({
         title: title,
@@ -520,6 +566,23 @@ export default {
       }).then(() => {
         $("#addHutang").modal("hide");
         $("#editPengeluaran").modal("hide");
+      });
+    },
+
+        konfirmasiBayar(id, keperluan_hutang) {
+      Swal.fire({
+        title: `Apakah Anda yakin ingin membayar hutang ${keperluan_hutang}?`,
+        text: "Pastikan saldo anda cukup.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#fac800",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Bayar",
+        cancelButtonText: "Batal",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.bayarHutang(id);
+        }
       });
     },
 
