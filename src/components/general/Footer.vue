@@ -1,6 +1,6 @@
 <template>
   <!-- Footer -->
-  <footer class="sticky-footer bg-gradient-light">
+  <footer class="sticky-footer bgCustom">
     <div class="container my-auto">
       <div class="copyright text-center my-auto">
         <strong>Copyright &copy; Federasi Panjat Tembing Indonesia 2024</strong>
@@ -10,7 +10,7 @@
   <!-- End of Footer -->
 </template>
 <style scoped>
-strong{
-  color: black;
+.bgCustom {
+  background-color: #b30e03;
 }
 </style>
