@@ -44,6 +44,16 @@ const router = createRouter({
       props: true,
       component: () => import('../views/admin/ReportEvent.vue')
     },
+    {
+      path: '/admin-jurnal',
+      name: 'admin-jurnal',
+      component: () => import('../views/admin/Jurnal.vue')
+    },
+    {
+      path: '/admin-ledger',
+      name: 'admin-ledger',
+      component: () => import('../views/admin/BukuBesar.vue')
+    },
 
 
     

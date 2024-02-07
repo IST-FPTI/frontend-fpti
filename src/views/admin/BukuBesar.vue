@@ -24,30 +24,32 @@ const toggleSidebar = () => {
         <Navbar @toggle-sidebar="toggleSidebar" />
 
         <div class="container-fluid mt-4">
-          <h1 class="h3 mb-0 text-gray-800 text-center mb-5">List Jurnal</h1>
+          <h1 class="h3 mb-0 text-gray-800 text-center mb-5">Buku Besar</h1>
           <div class="row">
             <div class="col-1"></div>
             <div class="col-10">
               <!-- Tabel hasil filter -->
-              <div class="table-responsive mt-5">
+              <div class="table-responsive">
                 <p class="text-center" v-if="!ready">Loading...</p>
                 <DataTable class="display table table-striped" v-if="ready">
                   <thead>
                     <tr>
                       <th scope="col" style="width: 50px">No</th>
-                      <th scope="col">Jenis</th>
-                      <th scope="col">Nominal</th>
-                      <th scope="col">Event</th>
-                      <th scope="col">Deskripsi</th>
+                      <th scope="col">Saldo</th>
+                      <th scope="col">Pengeluaran</th>
+                      <th scope="col">Pemasukan</th>
+                      <th scope="col">Hutang</th>
+                      <th scope="col">Piutang</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(item, index) in jurnals" :key="item.id">
-                      <td>{{ index + 1 }}</td>
-                      <td>{{ item.jenis }}</td>
-                      <td>{{ item.jumlah }}</td>
-                      <td>{{ item.event }}</td>
-                      <td>{{ item.deskripsi }}</td>
+                    <tr>
+                      <td>1</td>
+                      <td>{{ formatCurrency(bukuBesar.saldo) }}</td>
+                      <td>{{ formatCurrency(bukuBesar.total_pengeluaran) }}</td>
+                      <td>{{ formatCurrency(bukuBesar.total_pemasukan) }}</td>
+                      <td>{{ formatCurrency(bukuBesar.hutang_belum_dibayar) }}</td>
+                      <td>{{ formatCurrency(bukuBesar.piutang_belum_dibayar) }}</td>
                     </tr>
                   </tbody>
                 </DataTable>
@@ -77,28 +79,57 @@ DataTable.use(DataTablesCore);
 export default {
   data() {
     return {
-      jurnals: [],
+      bukuBesar: {
+        saldo:"",
+        total_pengeluaran:"",
+        total_pemasukan:"",
+        hutang_belum_dibayar:"",
+        piutang_belum_dibayar:""
+      },
       ready: false,
+      user_id:""
     };
   },
   methods: {
-    async fetchDataJurnal() {
+    async fetchDataBukuBesar() {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/jurnal`,
-          // `https://backend.keuanganfpti.com/api/data-jurnal`,
+          `https://backend.keuanganfpti.com/api/darsboard-data`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),
             },
           }
         );
-        this.jurnals = response.data.data;
+        this.bukuBesar = {
+          saldo : response.data.saldo,
+          total_pengeluaran : response.data.total_pengeluaran,
+          total_pemasukan : response.data.total_pemasukan,
+          hutang_belum_dibayar : response.data.hutang_belum_dibayar,
+          piutang_belum_dibayar : response.data.piutang_belum_dibayar,
+        };
+        console.log(response.data.saldo);
         this.ready = true;
       } catch (error) {
         this.ready = true;
         console.error(error);
       }
+    },
+  },
+  computed: {
+    // Metode komputasi untuk mengonversi jumlah menjadi format mata uang Rupiah
+    formatCurrency: function () {
+      return function (value) {
+        if (!value) return "Rp 0,00";
+
+        // Mengonversi nilai ke dalam format Rupiah
+        let formattedValue = new Intl.NumberFormat("id-ID", {
+          style: "currency",
+          currency: "IDR",
+        }).format(value);
+
+        return formattedValue;
+      };
     },
   },
   created() {
@@ -133,7 +164,7 @@ export default {
           this.$router.push("/");
         }
         // success
-        this.fetchDataJurnal();
+        this.fetchDataBukuBesar();
         // akhir
       } catch (error) {
         console.error("Error decoding token:", error);

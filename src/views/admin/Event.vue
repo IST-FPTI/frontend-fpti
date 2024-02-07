@@ -149,7 +149,7 @@ const toggleSidebar = () => {
                 type="text"
                 class="form-control"
                 id="mapel"
-                placeholder="masukkan nominal pengeluaran"
+                placeholder="masukkan nama event"
                 v-model="formEvent.nama_event"
               />
             </div>
@@ -168,7 +168,7 @@ const toggleSidebar = () => {
               <textarea
                 class="form-control"
                 id="keterangan"
-                placeholder="Masukkan keterangan"
+                placeholder="masukkan keterangan"
                 v-model="formEvent.deskripsi_event"
               ></textarea>
             </div>
@@ -217,7 +217,7 @@ const toggleSidebar = () => {
                 type="text"
                 class="form-control"
                 id="mapel"
-                placeholder="masukkan nominal pengeluaran"
+                placeholder="masukkan nama event"
                 v-model="formUpdateEvent.nama_event"
               />
             </div>
@@ -236,7 +236,7 @@ const toggleSidebar = () => {
               <textarea
                 class="form-control"
                 id="keterangan"
-                placeholder="Masukkan keterangan"
+                placeholder="masukkan keterangan"
                 v-model="formUpdateEvent.deskripsi_event"
               ></textarea>
             </div>
