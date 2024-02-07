@@ -176,7 +176,7 @@ const toggleSidebar = () => {
               <textarea
                 class="form-control"
                 id="keterangan"
-                placeholder="Masukkan deskripsi"
+                placeholder="masukkan deskripsi"
                 v-model="formSponsor.deskripsi_sponsor"
               ></textarea>
             </div>
@@ -260,7 +260,7 @@ const toggleSidebar = () => {
               <textarea
                 class="form-control"
                 id="keterangan"
-                placeholder="Masukkan deskripsi"
+                placeholder="masukkan deskripsi"
                 v-model="formUpdateSponsor.deskripsi_sponsor"
               ></textarea>
             </div>

@@ -173,7 +173,7 @@ const toggleSidebar = () => {
                 type="number"
                 class="form-control"
                 id="noHp"
-                placeholder="masukkan nomor hp"
+                placeholder="masukkan nomor hp peminjam"
                 v-model="formPiutang.no_hp"
               />
             </div>
@@ -209,7 +209,7 @@ const toggleSidebar = () => {
               <textarea
                 class="form-control"
                 id="keterangan"
-                placeholder="Masukkan deskripsi"
+                placeholder="masukkan deskripsi"
                 v-model="formPiutang.deskripsi_pinjaman"
               ></textarea>
             </div>
@@ -304,7 +304,7 @@ const toggleSidebar = () => {
               <textarea
                 class="form-control"
                 id="keterangan"
-                placeholder="Masukkan deskripsi"
+                placeholder="masukkan deskripsi"
                 v-model="formUpdatePiutang.deskripsi_pinjaman"
               ></textarea>
             </div>
