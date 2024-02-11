@@ -71,7 +71,7 @@
     </li>
 
     <!-- Nav Item -Laporan -->
-    <li class="nav-item">
+    <!-- <li class="nav-item">
       <a
         class="nav-link collapsed text-black"
         href="#"
@@ -99,7 +99,7 @@
           </router-link>
         </div>
       </div>
-    </li>
+    </li> -->
 
     <!-- Nav Item -Hutang Piutang -->
     <li class="nav-item">
