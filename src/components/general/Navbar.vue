@@ -43,14 +43,14 @@
           class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
           aria-labelledby="userDropdown"
         >
-          <router-link
+          <!-- <router-link
             class="dropdown-item"
             to="/admin-profile"
           >
-            <!-- <i class="fa-solid fa-user"></i> -->
+            <i class="fa-solid fa-user"></i>
             <i class="fas fa-solid fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
             Profil
-          </router-link>
+          </router-link> -->
           <a
             class="dropdown-item"
             href="#"
