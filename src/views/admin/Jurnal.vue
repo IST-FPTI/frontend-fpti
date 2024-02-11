@@ -85,8 +85,8 @@ export default {
     async fetchDataJurnal() {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/jurnal`,
-          // `https://backend.keuanganfpti.com/api/data-jurnal`,
+          // `http://127.0.0.1:8000/api/jurnal`,
+          `https://backend.keuanganfpti.com/api/jurnal`,
           {
             headers: {
               Authorization: "Bearer " + sessionStorage.getItem("token"),

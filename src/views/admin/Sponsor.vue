@@ -89,7 +89,7 @@ const toggleSidebar = () => {
                         </div>
                       </td>
                       <td>{{ item.pemberi_sponsor }}</td>
-                      <td>{{ item.dana_sponsor }}</td>
+                      <td>{{ formatCurrency(item.dana_sponsor) }}</td>
                       <td>{{ item.deskripsi_sponsor }}</td>
                     </tr>
                   </tbody>

@@ -53,6 +53,7 @@ const toggleSidebar = () => {
                       <th scope="col">Kebutuhan</th>
                       <th scope="col">Jumlah Pengeluaranr</th>
                       <th scope="col">Deskripsi Pengeluaran</th>
+                      <th scope="col">Bukti Pengeluaran</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -91,6 +92,17 @@ const toggleSidebar = () => {
                       <td>{{ item.keperluan_pengeluaran }}</td>
                       <td>{{ item.jumlah_pengeluaran }}</td>
                       <td>{{ item.deskripsi_pengeluaran }}</td>
+                      <td>
+                         <img
+                        :src="
+                          'https://backend.keuanganfpti.com/storage/' +
+                          item.bukti_pengeluaran
+                        "
+                        alt="Bukti Transfer"
+                        style="max-width: 100px; cursor: pointer"
+                        @click="detailBukti(item.bukti_pengeluaran)"
+                      />
+                      </td>
                     </tr>
                   </tbody>
                 </DataTable>
@@ -137,21 +149,21 @@ const toggleSidebar = () => {
         <div class="modal-body">
           <form>
             <div class="mb-3">
-              <label for="ketua" class="form-label">Kebutuhan</label>
+              <label for="kebu" class="form-label">Kebutuhan</label>
               <input
                 type="text"
                 class="form-control"
-                id="mapel"
+                id="kebu"
                 placeholder="masukkan kebutuhan"
                 v-model="formPengeluaran.keperluan_pengeluaran"
               />
             </div>
             <div class="mb-3">
-              <label for="ketua" class="form-label">Jumlah Pengeluaran</label>
+              <label for="jumpe" class="form-label">Jumlah Pengeluaran</label>
               <input
                 type="text"
                 class="form-control"
-                id="mapel"
+                id="jumpe"
                 placeholder="masukkan jumlah pengeluaran"
                 v-model="formPengeluaran.jumlah_pengeluaran"
               />
@@ -169,6 +181,16 @@ const toggleSidebar = () => {
                   {{ dataEvent.nama_event }} - {{dataEvent.tanggal_event}}
                 </option>
               </select>
+            </div>
+
+             <div class="mb-3">
+              <label for="bukti_pengeluaran" class="form-label">Bukti Pengeluaran</label>
+              <input
+                type="file"
+                class="form-control"
+                id="bukti_pengeluaran"
+                @change="handleFileUpload"
+              />
             </div>
 
             <div class="mb-3">
@@ -279,6 +301,54 @@ const toggleSidebar = () => {
     </div>
   </div>
   <!-- end modal edit kelas -->
+
+    <!-- modal detail bukti -->
+   <div
+    class="modal fade"
+    id="detailBukti"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="detailBuktiLabel"
+    aria-hidden="true"
+    ref="detailBuktiRef"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addInvoiceModalLabel">
+            Detail Bukti Keterangan
+          </h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <img
+            :src="
+              'https://backend.keuanganfpti.com/storage/' +
+              path
+            "
+            alt="Bukti Transfer"
+            style="width: 100%"
+          />
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
 import axios from "axios";
@@ -297,19 +367,26 @@ export default {
         keperluan_pengeluaran: "",
         jumlah_pengeluaran: "",
         deskripsi_pengeluaran: "",
+        bukti_pengeluaran:null
       },
       formUpdatePengeluaran: {
         keperluan_pengeluaran: "",
         jumlah_pengeluaran: "",
         deskripsi_pengeluaran: "",
+        bukti_pengeluaran:null,
         id_pengeluaran:""
       },
       ready: false,
       selectedEvent:"",
-      user_id:""
+      user_id:"",
+      path:""
     };
   },
   methods: {
+        detailBukti(bukti_pengeluaran) {
+      this.path = bukti_pengeluaran;
+      $("#detailBukti").modal("show");
+    },
     setDataUpdate(keperluan_pengeluaran, jumlah_pengeluaran, deskripsi_pengeluaran, id) {
       this.formUpdatePengeluaran.keperluan_pengeluaran = keperluan_pengeluaran;
       this.formUpdatePengeluaran.jumlah_pengeluaran = jumlah_pengeluaran;
@@ -322,6 +399,7 @@ export default {
       formData.append("keperluan_pengeluaran", this.formPengeluaran.keperluan_pengeluaran);
       formData.append("jumlah_pengeluaran", this.formPengeluaran.jumlah_pengeluaran);
       formData.append("deskripsi_pengeluaran", this.formPengeluaran.deskripsi_pengeluaran);
+      formData.append("bukti_pengeluaran", this.formPengeluaran.bukti_pengeluaran);
       formData.append("id_event", this.selectedEvent);
 
       axios
@@ -482,6 +560,10 @@ export default {
           this.deletePengeluaran(id);
         }
       });
+    },
+    handleFileUpload(event) {
+      // Menggunakan FormData untuk mengirim file
+      this.formPengeluaran.bukti_pengeluaran = event.target.files[0];
     },
   },
   computed: {
