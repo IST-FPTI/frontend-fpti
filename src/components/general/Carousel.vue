@@ -1,13 +1,13 @@
 <template>
   <Carousel :autoplay="2000" :wrap-around="true">
-    <Slide v-for="slide in 2" :key="slide">
+    <Slide v-for="(slide, index) in slides" :key="index">
       <div class="row">
         <div class="col-sm-6">
-          <img src="@/assets/img/person2.jpg" height="100" alt="gambar" />
+          <img :src="slide.imageUrl" height="100" alt="gambar" />
         </div>
         <div class="col-sm-6">
-          <div class="carousel__item">Berita {{ slide }}</div>
-          <div class="carousel__item">Lorem ipsum dolor sit amet consectetur, adipisicing elit.</div>
+          <div class="carousel__item">{{ slide.title }}</div>
+          <div class="carousel__item">{{ slide.description }}</div>
         </div>
       </div>
     </Slide>
@@ -24,12 +24,33 @@ import { Carousel, Pagination, Slide } from 'vue3-carousel'
 
 import 'vue3-carousel/dist/carousel.css'
 
+// Import gambar dari direktori asset
+// import person1 from '@/assets/img/person1.jpg'
+import person2 from '@/assets/img/person2.jpg'
+
 export default defineComponent({
   name: 'Autoplay',
   components: {
     Carousel,
     Slide,
     Pagination,
+  },
+  data() {
+    return {
+      slides: [
+        {
+          title: 'Berita 1',
+          description: 'Federasi Panjat Tebing Indonesia',
+          imageUrl: person2,
+        },
+        {
+          title: 'Berita 2',
+          description: 'Tempat Menyalurkan Bakat Pemuda',
+          imageUrl: person2,
+        },
+        // Tambahkan slide lainnya sesuai kebutuhan
+      ],
+    }
   },
 })
 </script>

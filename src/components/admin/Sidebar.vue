@@ -159,7 +159,7 @@
       </router-link>
     </li>
 
-     <li class="nav-item">
+     <!-- <li class="nav-item">
       <router-link
         class="nav-link text-black"
         to="/admin-pengguna"
@@ -168,7 +168,7 @@
         <i class="bi bi-person-fill"></i>
         <span>Users</span>
       </router-link>
-    </li>
+    </li> -->
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block" />
