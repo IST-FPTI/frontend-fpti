@@ -47,7 +47,7 @@
         aria-controls="collapseKeuangan"
       >
         <i class="bi bi-cash-coin" style="font-size:16px"></i>
-        <span style="font-weight:bold">Events</span>
+        <span style="font-weight:bold">Transaksi</span>
       </a>
       <div
         id="collapseKeuangan"
