@@ -37,99 +37,15 @@
 
 
     <!-- Nav Item -Transaksi -->
-    <li class="nav-item">
-      <a
-        class="nav-link collapsed text-black"
-        href="#"
-        data-toggle="collapse"
-        data-target="#collapseKeuangan"
-        aria-expanded="true"
-        aria-controls="collapseKeuangan"
+     <li class="nav-item">
+      <router-link
+        class="nav-link text-black"
+        to="/admin-event"
+        active-class="font-weight-bold active-link"
       >
         <i class="bi bi-cash-coin" style="font-size:16px"></i>
         <span style="font-weight:bold">Transaksi</span>
-      </a>
-      <div
-        id="collapseKeuangan"
-        class="collapse"
-        aria-labelledby="headingPages"
-        data-parent="#accordionSidebar"
-      >
-        <div class="bg-white py-2 collapse-inner rounded">
-          <h6 class="collapse-header">Management Event</h6>
-          <router-link class="collapse-item" to="/admin-event">
-            <span>Event</span>
-          </router-link>
-          <router-link class="collapse-item" to="/admin-sponsor">
-            <span>Sponsor</span>
-          </router-link>
-          <router-link class="collapse-item" to="/admin-pengeluaran">
-            <span>Pengeluaran</span>
-          </router-link>
-        </div>
-      </div>
-    </li>
-
-    <!-- Nav Item -Laporan -->
-    <!-- <li class="nav-item">
-      <a
-        class="nav-link collapsed text-black"
-        href="#"
-        data-toggle="collapse"
-        data-target="#collapseLaporan"
-        aria-expanded="true"
-        aria-controls="collapseLaporan"
-      >
-        <i class="bi bi-file-text-fill"></i>
-        <span class="fw-bold">Laporan</span>
-      </a>
-      <div
-        id="collapseLaporan"
-        class="collapse"
-        aria-labelledby="headingPages"
-        data-parent="#accordionSidebar"
-      >
-        <div class="bg-white py-2 collapse-inner rounded">
-          <h6 class="collapse-header">Laporan Keuangan</h6>
-          <router-link class="collapse-item" to="/admin-realisasi-anggaran">
-            <span>Realisasi Anggaran</span>
-          </router-link>
-          <router-link class="collapse-item" to="/admin-audit">
-            <span>Audit Tahunan</span>
-          </router-link>
-        </div>
-      </div>
-    </li> -->
-
-    <!-- Nav Item -Hutang Piutang -->
-    <li class="nav-item">
-      <a
-        class="nav-link collapsed text-black"
-        href="#"
-        data-toggle="collapse"
-        data-target="#collapseHitungPiutang"
-        aria-expanded="true"
-        aria-controls="collapseHitungPiutang"
-      >
-        <i class="bi bi-wallet-fill"></i>
-        <span class="fw-bold">Hutang Piutang</span>
-      </a>
-      <div
-        id="collapseHitungPiutang"
-        class="collapse"
-        aria-labelledby="headingPages"
-        data-parent="#accordionSidebar"
-      >
-        <div class="bg-white py-2 collapse-inner rounded">
-          <h6 class="collapse-header">Management Hutang</h6>
-          <router-link class="collapse-item" to="/admin-hutang">
-            <span>Hutang</span>
-          </router-link>
-          <router-link class="collapse-item" to="/admin-piutang">
-            <span>Piutang</span>
-          </router-link>
-        </div>
-      </div>
+      </router-link>
     </li>
 
     <!-- Divider -->

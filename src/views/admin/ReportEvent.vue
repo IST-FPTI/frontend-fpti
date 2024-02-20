@@ -162,7 +162,8 @@ export default {
     };
   },
   mounted() {
-    this.fetchEventReport();
+    const body = document.querySelector("body");
+    body.style.backgroundColor = "white";
   },
   methods: {
     exportToPDF() {
@@ -204,6 +205,48 @@ export default {
           console.error("Error fetching event report:", error);
         });
     },
+  },
+  created() {
+    const token = sessionStorage.getItem("token"); // Ambil token dari local storage
+
+    if (token) {
+      try {
+        const [headerBase64, signatureBase64] = token.split(".");
+        const header = JSON.parse(atob(headerBase64));
+        const signature = atob(signatureBase64);
+
+        const tokenPayload = JSON.parse(atob(token.split(".")[1])); // Mendekode bagian payload dari token JWT
+        const expTimestamp = tokenPayload.exp;
+
+        const expDate = new Date(expTimestamp * 1000); // Konversi Unix Timestamp ke JavaScript Date
+
+        console.log("Waktu Kedaluwarsa (UTC):", expDate.toUTCString()); // Tampilkan waktu kedaluwarsa dalam format UTC
+
+        if (new Date() > expDate) {
+          console.log("Keluar");
+          sessionStorage.removeItem("token");
+          this.$router.push("/");
+        } else {
+          console.log("Aman");
+        }
+        const level = tokenPayload.level; // Ambil level pengguna dari payload
+        this.user_id = tokenPayload.id;
+        console.log("ini idddd:", this.user_id);
+        if (level !== "1") {
+          this.$router.push("/unauthorized");
+        } else if (!header || !signature) {
+          this.$router.push("/");
+        }
+        // success
+        this.fetchEventReport();
+        // akhir
+      } catch (error) {
+        console.error("Error decoding token:", error);
+        this.$router.push("/"); // Tindakan jika terjadi kesalahan dekode
+      }
+    } else {
+      this.$router.push("/"); // Tindakan jika token tidak ada (pengguna belum terautentikasi)
+    }
   },
 };
 </script>

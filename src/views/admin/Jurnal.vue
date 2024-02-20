@@ -37,6 +37,7 @@ const toggleSidebar = () => {
                       <th scope="col" style="width: 50px">No</th>
                       <th scope="col">Jenis</th>
                       <th scope="col">Nominal</th>
+                      <th scope="col">Tanggal</th>
                       <th scope="col">Event</th>
                       <th scope="col">Deskripsi</th>
                     </tr>
@@ -46,6 +47,7 @@ const toggleSidebar = () => {
                       <td>{{ index + 1 }}</td>
                       <td>{{ item.jenis }}</td>
                       <td>{{ item.jumlah }}</td>
+                      <td>{{ item.tanggal }}</td>
                       <td>{{ item.event }}</td>
                       <td>{{ item.deskripsi }}</td>
                     </tr>

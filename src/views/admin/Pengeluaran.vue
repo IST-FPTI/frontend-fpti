@@ -122,7 +122,7 @@ const toggleSidebar = () => {
     <!-- End of Content Wrapper -->
   </div>
 
-  <!-- modal tambah transaksi -->
+  <!-- modal tambah pengeluaran -->
   <div
     class="modal fade"
     id="addPengeluaran"
@@ -216,9 +216,9 @@ const toggleSidebar = () => {
       </div>
     </div>
   </div>
-  <!-- end modal tambah transaksi -->
+  <!-- end modal tambah pengeluaran -->
 
-  <!-- modal edit transaksi -->
+  <!-- modal edit pengeluaran -->
   <div
     class="modal fade"
     id="editPengeluaran"
@@ -300,7 +300,7 @@ const toggleSidebar = () => {
       </div>
     </div>
   </div>
-  <!-- end modal edit kelas -->
+  <!-- end modal edit pengeluarab -->
 
     <!-- modal detail bukti -->
    <div
@@ -349,6 +349,7 @@ const toggleSidebar = () => {
       </div>
     </div>
   </div>
+  <!-- end modal detail bukti -->
 </template>
 <script>
 import axios from "axios";
