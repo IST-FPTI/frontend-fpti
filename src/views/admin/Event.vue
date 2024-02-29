@@ -697,7 +697,7 @@ const toggleSidebar = () => {
                   <td>{{ formatCurrency(item.jumlah_pengeluaran) }}</td>
                   <td>{{ item.deskripsi_pengeluaran }}</td>
                   <td>
-                    <img
+                    <!-- <img
                       :src="
                         'https://backend.keuanganfpti.com/storage/' +
                         item.bukti_pengeluaran
@@ -705,7 +705,8 @@ const toggleSidebar = () => {
                       alt="Bukti Transfer"
                       style="max-width: 100px; cursor: pointer"
                       @click="detailBukti(item.bukti_pengeluaran)"
-                    />
+                    /> -->
+                    <button class="btn btn-warning" @click="detailBukti(item.bukti_pengeluarans)">Lihat Bukti</button>
                   </td>
                   <td>{{ item.tanggal_pengeluaran }}</td>
                 </tr>
@@ -908,49 +909,29 @@ const toggleSidebar = () => {
   <!-- end modal edit pengeluaran -->
 
   <!-- modal detail bukti -->
-  <div
-    class="modal fade"
-    id="detailBukti"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="detailBuktiLabel"
-    aria-hidden="true"
-    ref="detailBuktiRef"
-  >
+<div class="modal fade" id="detailBukti" tabindex="-1" role="dialog" aria-labelledby="detailBuktiLabel" aria-hidden="true" ref="detailBuktiRef">
     <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addInvoiceModalLabel">
-            Detail Bukti Pengeluaran
-          </h5>
-          <button
-            type="button"
-            class="close"
-            data-dismiss="modal"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addInvoiceModalLabel">Detail Bukti Pengeluaran</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div v-for="(bukti, index) in path" :key="index">
+                    <img :src="'https://backend.keuanganfpti.com/storage/bukti_pengeluaran/' + bukti['bukti_pengeluaran']" alt="bukti pengeluaran" style="width: 100%" />
+                    <hr> 
+                    <p>{{bukti['bukti_pengeluaran']}}</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
         </div>
-        <div class="modal-body">
-          <img
-            :src="'https://backend.keuanganfpti.com/storage/' + path"
-            alt="Bukti Transfer"
-            style="width: 100%"
-          />
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
+
   <!-- end modal detail bukti -->
   <!------------------------------------- end modals pengeluaran  ---------------------------------->
 
@@ -1598,7 +1579,7 @@ export default {
         id_pengeluaran: "",
       },
       readyPengeluaran: false,
-      path: "",
+      path: [],
       // --------------------end pengeluaran---------------------
 
       // -------------------- Hutangs ---------------------------
