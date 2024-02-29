@@ -465,7 +465,9 @@ const toggleSidebar = () => {
         <div class="modal-body">
           <form>
             <div class="mb-3">
-              <label for="pemberiSponsor" class="form-label">Pemberi Sponsor</label>
+              <label for="pemberiSponsor" class="form-label"
+                >Pemberi Sponsor</label
+              >
               <input
                 type="text"
                 class="form-control"
@@ -485,7 +487,9 @@ const toggleSidebar = () => {
               />
             </div>
             <div class="mb-3">
-              <label for="tanggalSponsor" class="form-label">Tanggal Sponsor</label>
+              <label for="tanggalSponsor" class="form-label"
+                >Tanggal Sponsor</label
+              >
               <input
                 type="date"
                 class="form-control"
@@ -543,7 +547,9 @@ const toggleSidebar = () => {
         <div class="modal-body">
           <form>
             <div class="mb-3">
-              <label for="pemberiSponsor" class="form-label">Pemberi Sponsor</label>
+              <label for="pemberiSponsor" class="form-label"
+                >Pemberi Sponsor</label
+              >
               <input
                 type="text"
                 class="form-control"
@@ -563,7 +569,9 @@ const toggleSidebar = () => {
               />
             </div>
             <div class="mb-3">
-              <label for="tanggalSponsor" class="form-label">Tanggal Sponsor</label>
+              <label for="tanggalSponsor" class="form-label"
+                >Tanggal Sponsor</label
+              >
               <input
                 type="date"
                 class="form-control"
@@ -699,7 +707,7 @@ const toggleSidebar = () => {
                       @click="detailBukti(item.bukti_pengeluaran)"
                     />
                   </td>
-                  <td>{{item.tanggal_pengeluaran}}</td>
+                  <td>{{ item.tanggal_pengeluaran }}</td>
                 </tr>
               </tbody>
             </DataTable>
@@ -747,7 +755,7 @@ const toggleSidebar = () => {
                 type="text"
                 class="form-control"
                 id="kebu"
-                placeholder="masukkan kebutuhan"
+                placeholder="Masukkan kebutuhan"
                 v-model="formPengeluaran.keperluan_pengeluaran"
               />
             </div>
@@ -757,12 +765,14 @@ const toggleSidebar = () => {
                 type="text"
                 class="form-control"
                 id="jumpe"
-                placeholder="masukkan jumlah pengeluaran"
+                placeholder="Masukkan jumlah pengeluaran"
                 v-model="formPengeluaran.jumlah_pengeluaran"
               />
             </div>
             <div class="mb-3">
-              <label for="tanggalPe" class="form-label">Tanggal Pengeluaran</label>
+              <label for="tanggalPe" class="form-label"
+                >Tanggal Pengeluaran</label
+              >
               <input
                 type="date"
                 class="form-control"
@@ -770,7 +780,6 @@ const toggleSidebar = () => {
                 v-model="formPengeluaran.tanggal_pengeluaran"
               />
             </div>
-
             <div class="mb-3">
               <label for="bukti_pengeluaran" class="form-label"
                 >Bukti Pengeluaran</label
@@ -779,16 +788,16 @@ const toggleSidebar = () => {
                 type="file"
                 class="form-control"
                 id="bukti_pengeluaran"
+                multiple
                 @change="handleFileUpload"
               />
             </div>
-
             <div class="mb-3">
               <label for="keterangan" class="form-label">Deskripsi</label>
               <textarea
                 class="form-control"
                 id="keterangan"
-                placeholder="masukkan deskripsi"
+                placeholder="Masukkan deskripsi"
                 v-model="formPengeluaran.deskripsi_pengeluaran"
               ></textarea>
             </div>
@@ -809,6 +818,7 @@ const toggleSidebar = () => {
       </div>
     </div>
   </div>
+
   <!-- end modal tambah pengeluaran -->
 
   <!-- modal edit pengeluaran -->
@@ -857,8 +867,10 @@ const toggleSidebar = () => {
                 v-model="formUpdatePengeluaran.jumlah_pengeluaran"
               />
             </div>
-                        <div class="mb-3">
-              <label for="tanggalPe" class="form-label">Tanggal Pengeluaran</label>
+            <div class="mb-3">
+              <label for="tanggalPe" class="form-label"
+                >Tanggal Pengeluaran</label
+              >
               <input
                 type="date"
                 class="form-control"
@@ -893,7 +905,7 @@ const toggleSidebar = () => {
       </div>
     </div>
   </div>
-  <!-- end modal edit pengeluarab -->
+  <!-- end modal edit pengeluaran -->
 
   <!-- modal detail bukti -->
   <div
@@ -1294,7 +1306,9 @@ const toggleSidebar = () => {
                       <button
                         type="button"
                         class="btn btn-success"
-                        @click="konfirmasiBayarPiutang(item.id, item.pihak_peminjam)"
+                        @click="
+                          konfirmasiBayarPiutang(item.id, item.pihak_peminjam)
+                        "
                         v-if="item.status == '0'"
                       >
                         <i class="bi bi-cash-coin"></i>
@@ -1573,7 +1587,7 @@ export default {
         jumlah_pengeluaran: "",
         deskripsi_pengeluaran: "",
         tanggal_pengeluaran: "",
-        bukti_pengeluaran: null,
+        bukti_pengeluaran: [],
       },
       formUpdatePengeluaran: {
         keperluan_pengeluaran: "",
@@ -1643,7 +1657,14 @@ export default {
       // Munculkan modal dengan menggunakan jQuery
       $("#editEvent").modal("show");
     },
-    setDataUpdateEvent(nama_event, start_date, end_date, lokasi_event, deskripsi_event, id) {
+    setDataUpdateEvent(
+      nama_event,
+      start_date,
+      end_date,
+      lokasi_event,
+      deskripsi_event,
+      id
+    ) {
       this.formUpdateEvent.nama_event = nama_event;
       this.formUpdateEvent.start_date = start_date;
       this.formUpdateEvent.end_date = end_date;
@@ -1800,7 +1821,13 @@ export default {
     // ----------------------------- end event -----------------------------------
 
     // ----------------------------- pemasukan / sponsor ----------------------------------
-    setDataUpdateSponsor(pemberi_sponsor, dana_sponsor, deskripsi_sponsor, tanggal_sponsor, id) {
+    setDataUpdateSponsor(
+      pemberi_sponsor,
+      dana_sponsor,
+      deskripsi_sponsor,
+      tanggal_sponsor,
+      id
+    ) {
       this.formUpdateSponsor.pemberi_sponsor = pemberi_sponsor;
       this.formUpdateSponsor.dana_sponsor = dana_sponsor;
       this.formUpdateSponsor.deskripsi_sponsor = deskripsi_sponsor;
@@ -2008,40 +2035,44 @@ export default {
     },
     createPengeluaran() {
       this.readyPengeluaran = false;
-      const formData = new FormData();
-      formData.append(
-        "keperluan_pengeluaran",
-        this.formPengeluaran.keperluan_pengeluaran
-      );
-      formData.append(
-        "jumlah_pengeluaran",
-        this.formPengeluaran.jumlah_pengeluaran
-      );
-      formData.append(
-        "deskripsi_pengeluaran",
-        this.formPengeluaran.deskripsi_pengeluaran
-      );
-      formData.append(
-        "bukti_pengeluaran",
-        this.formPengeluaran.bukti_pengeluaran
-      );
-      formData.append(
-        "tanggal_pengeluaran",
-        this.formPengeluaran.tanggal_pengeluaran
-      );
-      formData.append("id_event", this.selectedEvent);
+
+      // Ubah gambar-gambar menjadi base64
+      let encodedImages = [];
+      for (let i = 0; i < this.formPengeluaran.bukti_pengeluaran.length; i++) {
+        let reader = new FileReader();
+        reader.readAsDataURL(this.formPengeluaran.bukti_pengeluaran[i]);
+        reader.onloadend = () => {
+          let base64data = reader.result;
+          encodedImages.push(base64data);
+
+          // Setelah semua gambar dienkripsi, kirim permintaan POST
+          if (
+            encodedImages.length ===
+            this.formPengeluaran.bukti_pengeluaran.length
+          ) {
+            this.sendPengeluaranData(encodedImages);
+          }
+        };
+      }
+    },
+
+    sendPengeluaranData(encodedImages) {
+      const pengeluaranData = {
+        keperluan_pengeluaran: this.formPengeluaran.keperluan_pengeluaran,
+        jumlah_pengeluaran: this.formPengeluaran.jumlah_pengeluaran,
+        deskripsi_pengeluaran: this.formPengeluaran.deskripsi_pengeluaran,
+        tanggal_pengeluaran: this.formPengeluaran.tanggal_pengeluaran,
+        id_event: this.selectedEvent, 
+        bukti_pengeluaran: encodedImages,
+      };
 
       axios
-        .post(
-          "https://backend.keuanganfpti.com/api/create-pengeluaran",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: "Bearer " + sessionStorage.getItem("token"),
-            },
-          }
-        )
+        .post("https://backend.keuanganfpti.com/api/create-pengeluaran", pengeluaranData, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + sessionStorage.getItem("token"),
+          },
+        })
         .then((response) => {
           console.log(response.data);
           this.formPengeluaran = {
@@ -2053,20 +2084,21 @@ export default {
           this.fetchDataPengeluaran(this.selectedEvent);
           this.showAlertPengeluaran(
             "Request Success",
-            "Pengeluaran berhasil buat",
+            "Pengeluaran berhasil dibuat",
             "success"
           );
         })
         .catch((error) => {
           this.showAlertPengeluaran(
             "Request Failed",
-            "Pengeluaran gagal buat",
+            "Pengeluaran gagal dibuat",
             "error"
           );
           console.error(error);
           this.readyPengeluaran = true;
         });
     },
+
     updatePengeluaran() {
       this.readyPengeluaran = false;
       const formData = new FormData();
@@ -2212,8 +2244,16 @@ export default {
       });
     },
     handleFileUpload(event) {
-      // Menggunakan FormData untuk mengirim file
-      this.formPengeluaran.bukti_pengeluaran = event.target.files[0];
+      // Mendapatkan semua file yang dipilih
+      const files = event.target.files;
+
+      // Mengubah formPengeluaran.bukti_pengeluaran menjadi array kosong
+      this.formPengeluaran.bukti_pengeluaran = [];
+
+      // Menambahkan semua file ke array formPengeluaran.bukti_pengeluaran
+      for (const file of files) {
+        this.formPengeluaran.bukti_pengeluaran.push(file);
+      }
     },
     // ---------------------------------- End Pengeluaran --------------------------------------
 
