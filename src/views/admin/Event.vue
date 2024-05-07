@@ -83,6 +83,7 @@ const toggleSidebar = () => {
                               type="button"
                               data-toggle="dropdown"
                               aria-expanded="false"
+                              style="border-radius: 0px 10px 10px 0 !important;"
                             >
                               <i class="bi bi-info-circle-fill"></i>
                             </button>
@@ -129,13 +130,14 @@ const toggleSidebar = () => {
                               </li>
                             </ul>
                           </div>
-                          <button
+                          <!-- <button
                             @click="konfirmasiEvent(item.id, item.nama_event)"
                             class="btn btn-danger customDetail"
                           >
                             <i class="bi bi-trash3"></i>
-                          </button>
+                          </button> -->
                         </div>
+                        
                       </td>
                       <td>{{ item.nama_event }}</td>
                       <td>{{ item.deskripsi_event }}</td>
@@ -2761,5 +2763,6 @@ export default {
 }
 button.dropdown-toggle {
   border-radius: 0px !important;
+
 }
 </style>
